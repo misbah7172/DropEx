@@ -1,0 +1,20 @@
+Database name : DropEx
+
+
+1. arrived(TrackingID 	StaffID 	S_Name 	S_Add 	S_City 	S_State 	S_Contact 	R_Name 	R_Add 	R_City 	R_State 	R_Contact 	Weight_Kg 	Price 	Dispatched_Time 	Shipped 	Out_for_delivery 	Delivered)
+
+2. branches ( Branch_id 	Address 	Contact 	Email 	Manager_id 	)
+
+3. credentials ( StaffID 	Pwd 	)
+
+4. delivered ( TrackingID 	StaffID 	S_Name 	S_Add 	S_City 	S_State 	S_Contact 	R_Name 	R_Add 	R_City 	R_State 	R_Contact 	Weight_Kg 	Price 	Dispatched_Time 	Shipped 	Out_for_delivery 	Delivered) 
+
+5.  feedback ( F.No Cust_name 	Cust_mail 	Cust_msg 	)
+
+6. parcel ( TrackingID 	StaffID 	S_Name 	S_Add 	S_City 	S_State 	S_Contact 	R_Name 	R_Add 	R_City 	R_State 	R_Contact 	Weight_Kg 	Price 	Dispatched_Time)
+
+7. pricing ( S.No 	State_1 	State_2 	Cost 	)
+
+8. staff ( StaffID  pass 	Name 	Designation 	Gender 	DOB 	DOJ 	Salary 	Mobile 	Email 	Credits)
+
+9.status (  TrackingID 	StaffID 	Dispatched 	Shipped 	Out_for_delivery 	Delivered)

@@ -9,32 +9,38 @@ if(!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $user_name = $_SESSION['username'];
-$error = array('name' => '', 'email' => '', 'msg' => '');
-$name = $email = $msg = '';
 
 // Handle Feedback Submission
-if(isset($_POST['submit_feedback']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+if(isset($_POST['submit_feedback'])) {
     $name = $_SESSION['name'];
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $msg = mysqli_real_escape_string($conn, $_POST['msg']);
-    $f_id = $_SESSION['user_id']; // Get user_id from session
+    $f_id = $_SESSION['user_id'];
     
-    if (!isset($_SESSION['last_feedback_time']) || 
-        (time() - $_SESSION['last_feedback_time']) > 2) {
-        
-        $sql = "INSERT INTO feedback (f_id, Cust_name, Cust_mail, Cust_msg) 
-                VALUES ('$f_id', '$name', '$email', '$msg')";
-        if(mysqli_query($conn, $sql)) {
-            $feedback_success = "Feedback submitted successfully!";
-            $_SESSION['last_feedback_time'] = time();
-        } else {
-            $feedback_error = "Error submitting feedback.";
-        }
+    $sql = "INSERT INTO feedback (f_id, Cust_name, Cust_mail, Cust_msg) 
+            VALUES (?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "isss", $f_id, $name, $email, $msg);
+    
+    if(mysqli_stmt_execute($stmt)) {
+        $_SESSION['success_popup'] = [
+            'title' => 'Success!',
+            'message' => 'Feedback submitted successfully!',
+            'type' => 'success'
+        ];
+    } else {
+        $_SESSION['success_popup'] = [
+            'title' => 'Error',
+            'message' => 'Error submitting feedback.',
+            'type' => 'error'
+        ];
     }
+    header("Location: " . $_SERVER['PHP_SELF'] . "#feedback");
+    exit;
 }
 
 // Handle Shipping Request
-if(isset($_POST['submit_request']) && $_SERVER["REQUEST_METHOD"] == "POST") {
+if(isset($_POST['submit_request'])) {
     $s_name = mysqli_real_escape_string($conn, $_POST['sender_name']);
     $s_add = mysqli_real_escape_string($conn, $_POST['sender_address']);
     $s_city = mysqli_real_escape_string($conn, $_POST['sender_city']);
@@ -46,44 +52,58 @@ if(isset($_POST['submit_request']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     $r_state = mysqli_real_escape_string($conn, $_POST['receiver_state']);
     $r_contact = mysqli_real_escape_string($conn, $_POST['receiver_contact']);
     $weight = mysqli_real_escape_string($conn, $_POST['weight']);
-    $o_id = $_SESSION['user_id']; // Get user_id from session
-    
-    // Check if delivery is available between these states
+    $o_id = $_SESSION['user_id'];
+
     $sql_check = "SELECT Cost FROM pricing WHERE 
-                 (State_1 = '$s_state' AND State_2 = '$r_state') OR 
-                 (State_1 = '$r_state' AND State_2 = '$s_state')";
-    $result_check = mysqli_query($conn, $sql_check);
-    
+                 (State_1 = ? AND State_2 = ?) OR 
+                 (State_1 = ? AND State_2 = ?)";
+    $stmt_check = mysqli_prepare($conn, $sql_check);
+    mysqli_stmt_bind_param($stmt_check, "ssss", $s_state, $r_state, $r_state, $s_state);
+    mysqli_stmt_execute($stmt_check);
+    $result_check = mysqli_stmt_get_result($stmt_check);
+
     if(mysqli_num_rows($result_check) > 0) {
         $row = mysqli_fetch_assoc($result_check);
-        $base_cost = $row['Cost'];
-        $price = $base_cost * $weight;
-        
-        if (!isset($_SESSION['last_request_time']) || 
-            (time() - $_SESSION['last_request_time']) > 2) {
-            
-            $sql = "INSERT INTO online_request (user_id, S_Name, S_Add, S_City, S_State, S_Contact, 
-                    R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price) 
-                    VALUES ('$o_id', '$s_name', '$s_add', '$s_city', '$s_state', '$s_contact',
-                    '$r_name', '$r_add', '$r_city', '$r_state', '$r_contact', '$weight', '$price')";
-            
-            if(mysqli_query($conn, $sql)) {
-                $request_success = "Shipping request submitted successfully! Estimated cost: ₹$price";
-                $_SESSION['last_request_time'] = time();
-                header("Location: " . $_SERVER['PHP_SELF'] . "#requests");
-                exit;
-            } else {
-                $request_error = "Error submitting request: " . mysqli_error($conn);
-            }
+        $price = $row['Cost'] * $weight;
+
+        $sql = "INSERT INTO online_request (user_id, S_Name, S_Add, S_City, S_State, S_Contact, 
+                R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "issssissssids", 
+            $o_id, $s_name, $s_add, $s_city, $s_state, $s_contact,
+            $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price);
+
+        if(mysqli_stmt_execute($stmt)) {
+            $_SESSION['success_popup'] = [
+                'title' => 'Success!',
+                'message' => "Shipping request submitted successfully!\nEstimated cost: ₹$price",
+                'type' => 'success'
+            ];
+        } else {
+            $_SESSION['success_popup'] = [
+                'title' => 'Error',
+                'message' => "Error submitting request: " . mysqli_error($conn),
+                'type' => 'error'
+            ];
         }
     } else {
-        $request_error = "Sorry, delivery is not available between $s_state and $r_state";
+        $_SESSION['success_popup'] = [
+            'title' => 'Warning',
+            'message' => "Sorry, delivery is not available between $s_state and $r_state",
+            'type' => 'warning'
+        ];
     }
+    header("Location: " . $_SERVER['PHP_SELF'] . "#requests");
+    exit;
 }
 
 // Fetch user's shipping requests
-$sql = "SELECT * FROM online_request WHERE user_id = '$user_id' ORDER BY Dispatched_Time DESC";
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT * FROM online_request WHERE user_id = ? ORDER BY Dispatched_Time DESC";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 

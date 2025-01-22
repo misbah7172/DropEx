@@ -209,7 +209,9 @@
     </div>
 
     <!-- Employee of the Month -->
-    <div class="bg-gradient-to-b from-gray-50 to-white">
+
+    <?php if(isset($_SESSION['id'])): ?>
+        <div class="bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
             <div class="text-center">
                 <img src="Images/ofthemonth.png" alt="Employee of the Month" class="mx-auto max-w-full h-auto mb-8">
@@ -220,6 +222,46 @@
                         <p class="text-gray-600">Credits: <?php echo $emp['Credits'] ?></p>
                     </div>
                 <?php endforeach; ?>
+            </div>
+        </div>
+    </div>                
+    <?php endif; ?>
+
+    <!-- Feedback Section -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">What Our Customers Say</h2>
+                <p class="mt-4 text-lg text-gray-600">Recent feedback from our valued customers</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <?php
+                $sql = "SELECT * FROM feedback ORDER BY f_id DESC LIMIT 5";  // Changed LIMIT to 5
+                $result = mysqli_query($conn, $sql);
+                if(mysqli_num_rows($result) > 0):
+                    while($feedback = mysqli_fetch_assoc($result)):
+                ?>
+                    <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex flex-col items-center text-center mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                                <i class='bx bxs-user-circle text-blue-600 text-2xl'></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-1"><?php echo htmlspecialchars($feedback['Cust_name']); ?></h3>
+                            </div>
+                        </div>
+                        <div class="relative mt-6 text-center">
+                            <i class='bx bxs-quote-left absolute top-0 left-0 text-blue-200 text-3xl -translate-x-2 -translate-y-2'></i>
+                            <p class="text-gray-700 leading-relaxed px-4">
+                                "<?php echo htmlspecialchars($feedback['Cust_msg']); ?>"
+                            </p>
+                            <i class='bx bxs-quote-right absolute bottom-0 right-0 text-blue-200 text-3xl translate-x-2 translate-y-2'></i>
+                        </div>
+                    </div>
+                <?php 
+                    endwhile;
+                endif;
+                ?>
             </div>
         </div>
     </div>

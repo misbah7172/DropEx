@@ -1,16 +1,31 @@
 <?php
     session_start();
     include("db_connect.php");
-    session_start();
+    
+    // Check if user is logged in
+    if (!isset($_SESSION['id'])) {
+        header("Location: login.php");
+        exit();
+    }
+    
+    // Prevent SQL injection using prepared statements
     $id = $_SESSION['id'];
-    $sql = "SELECT * FROM staff WHERE StaffID='$id'";
-    $result = mysqli_query($conn, $sql);
-    $staff = mysqli_fetch_assoc($result);
+    $stmt = $conn->prepare("SELECT * FROM staff WHERE StaffID = ?");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $staff = $result->fetch_assoc();
+    
+    // If no staff found, redirect
+    if (!$staff) {
+        header("Location: login.php");
+        exit();
+    }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>DropEx</title>
+        <title>DropEx - Account Details</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="style/bootstrap.css">
@@ -58,7 +73,9 @@
         </style>
     </head>
     <body>
-        <div class="text-center"><img src="Images/logo.png" id="logo" style="height: 100px; margin-top: 10px;" ></div>
+        <div class="text-center">
+            <img src="Images/logo.png" id="logo" alt="DropEx Logo" style="height: 100px; margin-top: 10px;">
+        </div>
         <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-default navbar-light mb-10" style="background-color: rgba(255, 255, 255, 0.8);">
             <div class="container">
                 <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#mainNav">
@@ -74,18 +91,18 @@
         </nav>
         <div class="container text-center">
             <h3>Account Details</h3>
-            <img src="Images/pp2.png" id="logo" style="height: 90px; border-radius: 50%; object-fit: cover;">
+            <img src="Images/pp2.png" id="profile-pic" alt="Profile Picture" style="height: 90px; border-radius: 50%; object-fit: cover;">
             <table class="text-left table table-bordered table-striped">
-                <tr><td style="font-weight:bold;">Name</td><td><?php echo $staff['Name']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Staff ID</td><td><?php echo $staff['StaffID']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Designation</td><td><?php echo $staff['Designation']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Branch</td><td><?php echo $staff['branch']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Gender</td><td><?php echo $staff['Gender']; ?></td></tr>
-                <tr><td style="font-weight:bold;">DOB</td><td><?php echo $staff['DOB']; ?></td></tr>
-                <tr><td style="font-weight:bold;">DOJ</td><td><?php echo $staff['DOJ']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Email</td><td><?php echo $staff['Email']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Mobile</td><td><?php echo $staff['Mobile']; ?></td></tr>
-                <tr><td style="font-weight:bold;">Credits</td><td><?php echo $staff['Credits']; ?></td></tr>
+                <tr><td style="font-weight:bold;">Name</td><td><?php echo htmlspecialchars($staff['Name']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Staff ID</td><td><?php echo htmlspecialchars($staff['StaffID']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Designation</td><td><?php echo htmlspecialchars($staff['Designation']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Branch</td><td><?php echo htmlspecialchars($staff['branch']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Gender</td><td><?php echo htmlspecialchars($staff['Gender']); ?></td></tr>
+                <tr><td style="font-weight:bold;">DOB</td><td><?php echo htmlspecialchars($staff['DOB']); ?></td></tr>
+                <tr><td style="font-weight:bold;">DOJ</td><td><?php echo htmlspecialchars($staff['DOJ']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Email</td><td><?php echo htmlspecialchars($staff['Email']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Mobile</td><td><?php echo htmlspecialchars($staff['Mobile']); ?></td></tr>
+                <tr><td style="font-weight:bold;">Credits</td><td><?php echo htmlspecialchars($staff['Credits']); ?></td></tr>
             </table>
         </div>
         <footer>

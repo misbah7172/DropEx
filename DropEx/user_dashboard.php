@@ -125,27 +125,39 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-default navbar-light mb-10" style="background-color: rgba(255, 255, 255, 0.7); margin-bottom: 15px; margin-top:10px !important;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: rgba(255, 255, 255, 0.9) !important; position: fixed; width: 100%; top: 0; z-index: 1000;">
         <div class="container">
             <a class="navbar-brand" href="index.php">
-                <img src="Images/logo.png" id="logo" style="height: 50px !important; margin-top: 10px !important;">
+                <img src="Images/logo.png" alt="DropEx Logo" style="height: 40px;">
             </a>
-            <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#mainNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
-                <div class="navbar-nav ml-auto" style="font-size: large;">
-                    <a class="nav-item nav-link text-dark mr-5" href="#feedback">Feedback</a>
-                    <a class="nav-item nav-link text-dark mr-5" href="#requests">Shipping Requests</a>
-                    <a class="nav-item nav-link text-dark mr-5" href="tracking.php">Tracking</a>
-                    <span class="nav-item nav-link text-dark mr-3">
-                        Welcome, <?php echo htmlspecialchars($user_name); ?>
-                    </span>
-                    <a class="nav-item nav-link btn-logout" href="user_logout.php">Logout</a>
-                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"></li>
+                        <a class="nav-link text-dark" href="#feedback">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="#requests">Shipping Requests</a>
+                    </li>
+                    <li class="nav-item"></li>
+                        <a class="nav-link text-dark" href="tracking.php">Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link text-dark">
+                            Welcome, <?php echo htmlspecialchars($user_name); ?>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-logout" href="user_logout.php">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
+
+    <div style="margin-top: 80px;"></div>
 
     <div class="container mt-4">
         <!-- Feedback Section -->

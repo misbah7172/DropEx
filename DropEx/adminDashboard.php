@@ -8,6 +8,26 @@ if(!isset($_SESSION['admin_id'])) {
     exit;
 }
 
+//Handle feedback deletion
+if(isset($_POST['delete_feedback'])) {
+    $feedback_id = mysqli_real_escape_string($conn, $_POST['feedback_id']);
+    
+    // Delete from feedback table using prepared statement
+    $delete_sql = "DELETE FROM feedback WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $delete_sql);
+    if($stmt) {
+        mysqli_stmt_bind_param($stmt, "s", $feedback_id);
+        if(mysqli_stmt_execute($stmt)) {
+            $success_message = "Feedback deleted successfully";
+        } else {
+            $error_message = "Error deleting feedback: " . mysqli_error($conn);
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        $error_message = "Error preparing delete statement: " . mysqli_error($conn);
+    }
+}
+
 // Handle staff deletion
 if(isset($_POST['delete_staff'])) {
     $staff_id = mysqli_real_escape_string($conn, $_POST['staff_id']);
@@ -298,6 +318,7 @@ $feedback_result = mysqli_query($conn, $feedback_sql);
                                         <th>Customer Name</th>
                                         <th>Email</th>
                                         <th>Message</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -307,6 +328,12 @@ $feedback_result = mysqli_query($conn, $feedback_sql);
                                         <td><?php echo htmlspecialchars($feedback['Cust_name']); ?></td>
                                         <td><?php echo htmlspecialchars($feedback['Cust_mail']); ?></td>
                                         <td><?php echo htmlspecialchars($feedback['Cust_msg']); ?></td>
+                                        <td>
+                                            <form method="POST" action="" onsubmit="return confirm('Are you sure you want to delete this feedback?');">
+                                                <input type="hidden" name="feedback_id" value="<?php echo $feedback['f_id']; ?>">
+                                                <button type="submit" name="delete_feedback" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     <?php endwhile; ?>
                                 </tbody>

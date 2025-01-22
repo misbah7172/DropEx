@@ -49,178 +49,212 @@
     }
 ?>
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Drop Ex</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="style/bootstrap.css">
-        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="style/index_styles.css">
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-        <style>
-            .carousel-inner img {
-              width: 100%;
-              height: 100%;
-            }
-            .btn-logout {
-                color: #dc3545 !important;
-            }
-            .btn-logout:hover {
-                color: #bd2130 !important;
-            }
-            .user-welcome {
-                margin-right: 15px;
-                color: #0056b3;
-                font-weight: 500;
-            }
-        </style>
-    </head>
-    <body style="font-family: Arial, Helvetica, sans-serif;">
-                            <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-default navbar-light mb-10" style="background-color: rgba(255, 255, 255, 0.7); margin-bottom: 15px; margin-top:10px !important;">
-                                <div class="container">
-                                    <a class="navbar-brand" href="index.php">
-                                        <img src="Images/logo.png" id="logo" style="height: 50px !important; margin-top: 10px !important;">
-                                    </a>
-                                    <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#mainNav">
-                                        <span class="navbar-toggler-icon"></span>
-                                    </button>
-                                    <div class="collapse navbar-collapse" id="mainNav">
-                                        <div class="navbar-nav ml-auto" style="font-size: large;">
-                                            <a class="nav-item nav-link text-dark mr-5 active" href="index.php">Home</a>
-                                            <a class="nav-item nav-link text-dark mr-5" href="tracking.php">Tracking</a>
-                                            <a class="nav-item nav-link text-dark mr-5" href="branches.php">Branches</a>
-                                            <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
-                                                <?php if(isset($_SESSION['id'])): ?>
-                                                    <a class="nav-item nav-link text-dark mr-3" href="staff.php">Dashboard</a>
-                                                <?php else: ?>
-                                                    <a class="nav-item nav-link text-dark mr-3" href="user_dashboard.php">Dashboard</a>
-                                                <?php endif; ?>
-                                                <a class="nav-item nav-link btn-logout" href="logout.php">Logout</a>
-                                            <?php else: ?>
-                                                <a class="nav-item nav-link text-dark" href="login.php">DropEx Login</a>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </nav>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropEx - Global Logistics Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.php" class="flex-shrink-0">
+                        <img class="h-12 w-auto" src="Images/logo.png" alt="DropEx Logo">
+                    </a>
+                </div>
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="index.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                    <a href="tracking.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Tracking</a>
+                    <a href="branches.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Branches</a>
+                    <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
+                        <?php if(isset($_SESSION['id'])): ?>
+                            <a href="staff.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <?php else: ?>
+                            <a href="user_dashboard.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        <?php endif; ?>
+                        <a href="logout.php" class="text-red-600 hover:text-red-800 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                    <?php endif; ?>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button type="button" class="mobile-menu-button bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="tracking.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Tracking</a>
+                <a href="branches.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Branches</a>
+                <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
+                    <?php if(isset($_SESSION['id'])): ?>
+                        <a href="staff.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                    <?php else: ?>
+                        <a href="user_dashboard.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                    <?php endif; ?>
+                    <a href="logout.php" class="text-red-600 hover:bg-red-50 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+                <?php else: ?>
+                    <a href="login.php" class="bg-blue-600 text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </nav>
 
-        <div class="container-fluid" style="width: 100%; padding: 0; margin: 0;">
-            <div class="container-fluid mt-10" style="width: 85%; height: 100%; border-radius: 15px;">
-                <div class="row">
-                    <div class="col-md-6 p-5" style="background-color: rgba(255, 255, 255, 0.7); color: black; border-radius: 15px;">
-                        <h2 class="display-5 text-center mb-3 pb-2" style="border-bottom: 2px solid white;">Business Only</h2>
-                        <p>Discover shipping and logistics service options from <span style="font-weight: bold; font-style: italic;">Drop Ex</span> Global Forwarding.</p>
-                        <h4>Services Available</h4>
-                        <ul style="list-style-type: none; padding-left: 0;">
-                            <li><i class='bx bx-package' style="font-size: 20px; margin-right: 10px"></i> Air Freight</li>
-                            <li><i class='bx bx-package' style="font-size: 20px; margin-right: 10px"></i> Road Freight</li>
-                            <li><i class='bx bx-package' style="font-size: 20px; margin-right: 10px"></i> Ocean Freight</li>
-                            <li><i class='bx bx-package' style="font-size: 20px; margin-right: 10px"></i> Rail Freight</li>
-                            <li><i class='bx bx-time' style="font-size: 20px; margin-right: 10px"></i> Express Delivery</li>
-                        </ul>
-                        <a href="services.html" class="btn btn-info mt-3">Explore DropEX</a>
+    <!-- Hero Section -->
+    <div class="pt-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="lg:flex lg:items-center lg:space-x-8">
+                <div class="lg:w-1/2 space-y-6">
+                    <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl">Business Solutions for Global Logistics</h1>
+                    <p class="text-lg text-gray-600">Discover shipping and logistics service options from <span class="font-semibold italic">Drop Ex</span> Global Forwarding.</p>
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-900">Services Available</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-3">
+                                <i class='bx bx-package text-blue-600 text-2xl'></i>
+                                <span>Air Freight</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class='bx bx-package text-blue-600 text-2xl'></i>
+                                <span>Road Freight</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class='bx bx-package text-blue-600 text-2xl'></i>
+                                <span>Ocean Freight</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class='bx bx-package text-blue-600 text-2xl'></i>
+                                <span>Rail Freight</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class='bx bx-time text-blue-600 text-2xl'></i>
+                                <span>Express Delivery</span>
+                            </div>
+                        </div>
+                        <a href="services.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                            Explore DropEx
+                        </a>
                     </div>
-                    <div class="col-md-6">
-                        <img src="Images/bigp.jpg" style="height: 500px; width: 100%; border-radius: 15px;">
+                </div>
+                <div class="lg:w-1/2 mt-8 lg:mt-0">
+                    <img src="Images/bigp.jpg" alt="Logistics" class="rounded-xl shadow-lg w-full h-auto object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="lg:flex lg:items-start lg:space-x-8">
+            <div class="lg:w-1/2 space-y-6">
+                <h2 class="text-3xl font-bold text-gray-900">About Us</h2>
+                <div class="prose prose-lg text-gray-600">
+                    <p>Welcome to DropEx, your trusted partner in global shipping and logistics. At DropEx, we specialize in delivering reliable, fast, and seamless shipping solutions to meet the demands of an interconnected world.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 mt-6">Why Choose DropEx?</h3>
+                    <ul class="space-y-3 list-none pl-0">
+                        <li class="flex items-center space-x-3">
+                            <i class='bx bx-check-circle text-green-500 text-xl'></i>
+                            <span>Global Reach: Connecting major hubs and remote locations worldwide</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class='bx bx-check-circle text-green-500 text-xl'></i>
+                            <span>Fast and Secure: Precision handling with guaranteed safety</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class='bx bx-check-circle text-green-500 text-xl'></i>
+                            <span>24/7 Support: Dedicated team for continuous assistance</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class='bx bx-check-circle text-green-500 text-xl'></i>
+                            <span>Eco-Friendly: Committed to sustainable logistics</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="lg:w-1/2 mt-8 lg:mt-0">
+                <div class="space-y-4">
+                    <img src="Images/aboutus.jpeg" alt="About DropEx" class="rounded-xl shadow-lg w-full h-64 object-cover">
+                    <div class="grid grid-cols-3 gap-4">
+                        <img src="Images/icon1.jpeg" alt="Service 1" class="rounded-lg w-full h-32 object-cover">
+                        <img src="Images/icon2.jpeg" alt="Service 2" class="rounded-lg w-full h-32 object-cover">
+                        <img src="Images/worker.jpeg" alt="Service 3" class="rounded-lg w-full h-32 object-cover">
+                        <img src="Images/icon4.jpg" alt="Service 4" class="rounded-lg w-full h-32 object-cover">
+                        <img src="Images/icon5.jpeg" alt="Service 5" class="rounded-lg w-full h-32 object-cover">
+                        <img src="Images/aboutus.jpeg" alt="Service 6" class="rounded-lg w-full h-32 object-cover">
                     </div>
                 </div>
             </div>
         </div>
-         </div>
-         <div class="container" id="about" style="margin-top: 20px; width: 85%;">
-             <div class="row">
-                <div class="col-md-6 p-5" style="background-color: rgba(255, 255, 255, 0.7); color: black; border-radius: 15px; ">
-                    <h2 class="display-5 text-center mb-3 pb-2" style="border-bottom: 2px solid white;">About Us</h2>
-                    <p>Welcome to DropEx, your trusted partner in global shipping and logistics. At DropEx, we specialize in delivering reliable, fast, and seamless shipping solutions to meet the demands of an interconnected world. With a strong focus on innovation, efficiency, and customer satisfaction, we bridge the gap between businesses and their customers across borders.</p>
-                    <p>Our mission is to simplify international shipping by providing end-to-end solutions that cater to businesses of all sizes. Whether you’re shipping packages across the globe or managing large-scale freight logistics, DropEx is committed to ensuring that every delivery reaches its destination on time, every time.</p>
-                    <h4>Why Choose DropEx?</h4>
-                    <ul>
-                        <li>Global Reach: We operate an extensive network that connects major hubs and remote locations worldwide.</li>
-                        <li>Fast and Secure: Your shipments are handled with precision, speed, and care, ensuring safe delivery.</li>
-                        <li>Customer-Centric Approach: Our dedicated team is available 24/7 to provide support and tailored solutions.</li>
-                        <li>Sustainability Focus: We are committed to eco-friendly practices, leveraging sustainable logistics technologies to reduce our environmental footprint.</li>
-                    </ul>
-                    <p>At DropEx, we go beyond delivering parcels; we deliver trust, reliability, and peace of mind. Join us as we redefine the future of shipping and make global trade more accessible than ever.</p>
-                </div>
-                <div class="col-md-6">
-                    <img src="Images/aboutus.jpeg" style="height: 500px; width: 100%; border-radius: 15px;" >
-                    <div class="row mt-3">
-                        <div class="col-md-4">
-                            <img src="Images/icon1.jpeg" style="width: 100%; height: 150px; border-radius: 15px;">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="Images/icon2.jpeg" style="width: 100%; height: 150px;border-radius: 15px;">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="Images/worker.jpeg" style="width: 100%; height: 150px;border-radius: 15px;">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="Images/icon4.jpg" style="width: 100%; height: 150px;border-radius: 15px;">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="Images/icon5.jpeg" style="width: 100%; height: 150px;border-radius: 15px;">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="Images/aboutus.jpeg" style="width: 100%; height: 150px;border-radius: 15px;">
-                        </div>
-                    </div>
-                </div>
-             </div>
-         </div>
-         <div class="container" style="margin-top: 20px; width: 85%;">
-            <div class="row">
-                <div class="col-md-12 text-center p-5" style="background-color: rgba(36, 35, 35, 0.3); color: black; ">
-                    <img src="Images/ofthemonth.png" style="width: 100%; border-top:2px solid white;" >
-                    <?php foreach($empmonth as $emp) : ?>
-                        <div style="margin:auto !important; border-bottom:2px solid white;">
-                            <p class="text-center pt-2" style="font-family: 'Times New Roman', Times, serif !important; font-size:x-large; color:gold;"><?php echo $emp['Name'] ?></p>
-                            <p>Staff ID : <?php echo $emp['StaffID'] ?> </p>
-                            <p>Credits : <?php echo $emp['Credits'] ?> </p>
-                        </div>
-                    <?php endforeach; ?>              
-                </div>
-             </div>
-            
-         </div>
-        <style>
-         footer {
-            text-align: center;
-            padding: 20px;
-            background: #0056b3;
-            color: #fff;
-            margin-top: 20px;
-        }
+    </div>
 
-        footer p {
-            margin: 0;
-            font-size: 0.9em;
-        }
-    </style>
-    <footer>
-        <p>&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
+    <!-- Employee of the Month -->
+    <div class="bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <img src="Images/ofthemonth.png" alt="Employee of the Month" class="mx-auto max-w-full h-auto mb-8">
+                <?php foreach($empmonth as $emp) : ?>
+                    <div class="bg-white rounded-xl shadow-sm p-6 max-w-2xl mx-auto">
+                        <h3 class="text-2xl font-bold text-yellow-500 mb-2"><?php echo $emp['Name'] ?></h3>
+                        <p class="text-gray-600">Staff ID: <?php echo $emp['StaffID'] ?></p>
+                        <p class="text-gray-600">Credits: <?php echo $emp['Credits'] ?></p>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <p class="text-sm">&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
+            </div>
+        </div>
     </footer>
-        <script>
-            document.querySelector('.btn-logout')?.addEventListener('click', function(e) {
-                e.preventDefault();
-                swal({
-                    title: "Logout",
-                    text: "Are you sure you want to logout?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willLogout) => {
-                    if (willLogout) {
-                        window.location.href = 'logout.php';
-                    }
-                });
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Logout confirmation
+        document.querySelector('.btn-logout')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            swal({
+                title: "Logout",
+                text: "Are you sure you want to logout?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willLogout) => {
+                if (willLogout) {
+                    window.location.href = 'logout.php';
+                }
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>

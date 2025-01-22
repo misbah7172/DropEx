@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 21, 2025 at 11:07 PM
+-- Generation Time: Jan 22, 2025 at 04:54 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -270,97 +270,97 @@ CREATE TABLE `pricing` (
 --
 
 INSERT INTO `pricing` (`p_id`, `State_1`, `State_2`, `Cost`) VALUES
-(0, 'Bangladesh', 'France', 1100),
-(0, 'Bangladesh', 'Germany', 1200),
-(0, 'Bangladesh', 'Spain', 1300),
-(0, 'Bangladesh', 'Italy', 1400),
-(0, 'Bangladesh', 'USA', 1500),
-(0, 'Bangladesh', 'UK', 1600),
-(0, 'Bangladesh', 'Australia', 1700),
-(0, 'Bangladesh', 'Japan', 1800),
-(0, 'Bangladesh', 'China', 1900),
-(0, 'Bangladesh', 'Russia', 1000),
-(0, 'Bangladesh', 'Egypt', 1100),
-(0, 'Bangladesh', 'South Africa', 1200),
-(0, 'Bangladesh', 'Brazil', 1300),
-(0, 'France', 'Germany', 1400),
-(0, 'France', 'Spain', 1500),
-(0, 'France', 'Italy', 1600),
-(0, 'France', 'USA', 1700),
-(0, 'France', 'UK', 1800),
-(0, 'France', 'Australia', 1900),
-(0, 'France', 'Japan', 1000),
-(0, 'France', 'China', 1100),
-(0, 'France', 'Russia', 1200),
-(0, 'France', 'Egypt', 1300),
-(0, 'France', 'South Africa', 1400),
-(0, 'France', 'Brazil', 1500),
-(0, 'Germany', 'Spain', 1600),
-(0, 'Germany', 'Italy', 1700),
-(0, 'Germany', 'USA', 1800),
-(0, 'Germany', 'UK', 1900),
-(0, 'Germany', 'Australia', 1000),
-(0, 'Germany', 'Japan', 1100),
-(0, 'Germany', 'China', 1200),
-(0, 'Germany', 'Russia', 1300),
-(0, 'Germany', 'Egypt', 1400),
-(0, 'Germany', 'South Africa', 1500),
-(0, 'Germany', 'Brazil', 1600),
-(0, 'Spain', 'Italy', 1700),
-(0, 'Spain', 'USA', 1800),
-(0, 'Spain', 'UK', 1900),
-(0, 'Spain', 'Australia', 1000),
-(0, 'Spain', 'Japan', 1100),
-(0, 'Spain', 'China', 1200),
-(0, 'Spain', 'Russia', 1300),
-(0, 'Spain', 'Egypt', 1400),
-(0, 'Spain', 'South Africa', 1500),
-(0, 'Spain', 'Brazil', 1600),
-(0, 'Italy', 'USA', 1700),
-(0, 'Italy', 'UK', 1800),
-(0, 'Italy', 'Australia', 1900),
-(0, 'Italy', 'Japan', 1000),
-(0, 'Italy', 'China', 1100),
-(0, 'Italy', 'Russia', 1200),
-(0, 'Italy', 'Egypt', 1300),
-(0, 'Italy', 'South Africa', 1400),
-(0, 'Italy', 'Brazil', 1500),
-(0, 'USA', 'UK', 1600),
-(0, 'USA', 'Australia', 1700),
-(0, 'USA', 'Japan', 1800),
-(0, 'USA', 'China', 1900),
-(0, 'USA', 'Russia', 1000),
-(0, 'USA', 'Egypt', 1100),
-(0, 'USA', 'South Africa', 1200),
-(0, 'USA', 'Brazil', 1300),
-(0, 'UK', 'Australia', 1400),
-(0, 'UK', 'Japan', 1500),
-(0, 'UK', 'China', 1600),
-(0, 'UK', 'Russia', 1700),
-(0, 'UK', 'Egypt', 1800),
-(0, 'UK', 'South Africa', 1900),
-(0, 'UK', 'Brazil', 1000),
-(0, 'Australia', 'Japan', 1100),
-(0, 'Australia', 'China', 1200),
-(0, 'Australia', 'Russia', 1300),
-(0, 'Australia', 'Egypt', 1400),
-(0, 'Australia', 'South Africa', 1500),
-(0, 'Australia', 'Brazil', 1600),
-(0, 'Japan', 'China', 1700),
-(0, 'Japan', 'Russia', 1800),
-(0, 'Japan', 'Egypt', 1900),
-(0, 'Japan', 'South Africa', 1000),
-(0, 'Japan', 'Brazil', 1100),
-(0, 'China', 'Russia', 1200),
-(0, 'China', 'Egypt', 1300),
-(0, 'China', 'South Africa', 1400),
-(0, 'China', 'Brazil', 1500),
-(0, 'Russia', 'Egypt', 1600),
-(0, 'Russia', 'South Africa', 1700),
-(0, 'Russia', 'Brazil', 1800),
-(0, 'Egypt', 'South Africa', 1900),
-(0, 'Egypt', 'Brazil', 1000),
-(0, 'South Africa', 'Brazil', 1100);
+(1, 'Bangladesh', 'France', 1100),
+(2, 'Bangladesh', 'Germany', 1200),
+(3, 'Bangladesh', 'Spain', 1300),
+(4, 'Bangladesh', 'Italy', 1400),
+(5, 'Bangladesh', 'USA', 1500),
+(6, 'Bangladesh', 'UK', 1600),
+(7, 'Bangladesh', 'Australia', 1700),
+(8, 'Bangladesh', 'Japan', 1800),
+(9, 'Bangladesh', 'China', 1900),
+(10, 'Bangladesh', 'Russia', 1000),
+(11, 'Bangladesh', 'Egypt', 1100),
+(12, 'Bangladesh', 'South Africa', 1200),
+(13, 'Bangladesh', 'Brazil', 1300),
+(14, 'France', 'Germany', 1400),
+(15, 'France', 'Spain', 1500),
+(16, 'France', 'Italy', 1600),
+(17, 'France', 'USA', 1700),
+(18, 'France', 'UK', 1800),
+(19, 'France', 'Australia', 1900),
+(20, 'France', 'Japan', 1000),
+(21, 'France', 'China', 1100),
+(22, 'France', 'Russia', 1200),
+(23, 'France', 'Egypt', 1300),
+(24, 'France', 'South Africa', 1400),
+(25, 'France', 'Brazil', 1500),
+(26, 'Germany', 'Spain', 1600),
+(27, 'Germany', 'Italy', 1700),
+(28, 'Germany', 'USA', 1800),
+(29, 'Germany', 'UK', 1900),
+(30, 'Germany', 'Australia', 1000),
+(31, 'Germany', 'Japan', 1100),
+(32, 'Germany', 'China', 1200),
+(33, 'Germany', 'Russia', 1300),
+(34, 'Germany', 'Egypt', 1400),
+(35, 'Germany', 'South Africa', 1500),
+(36, 'Germany', 'Brazil', 1600),
+(37, 'Spain', 'Italy', 1700),
+(38, 'Spain', 'USA', 1800),
+(39, 'Spain', 'UK', 1900),
+(40, 'Spain', 'Australia', 1000),
+(41, 'Spain', 'Japan', 1100),
+(42, 'Spain', 'China', 1200),
+(43, 'Spain', 'Russia', 1300),
+(44, 'Spain', 'Egypt', 1400),
+(45, 'Spain', 'South Africa', 1500),
+(46, 'Spain', 'Brazil', 1600),
+(47, 'Italy', 'USA', 1700),
+(48, 'Italy', 'UK', 1800),
+(49, 'Italy', 'Australia', 1900),
+(50, 'Italy', 'Japan', 1000),
+(51, 'Italy', 'China', 1100),
+(52, 'Italy', 'Russia', 1200),
+(53, 'Italy', 'Egypt', 1300),
+(54, 'Italy', 'South Africa', 1400),
+(55, 'Italy', 'Brazil', 1500),
+(56, 'USA', 'UK', 1600),
+(57, 'USA', 'Australia', 1700),
+(58, 'USA', 'Japan', 1800),
+(59, 'USA', 'China', 1900),
+(60, 'USA', 'Russia', 1000),
+(61, 'USA', 'Egypt', 1100),
+(62, 'USA', 'South Africa', 1200),
+(63, 'USA', 'Brazil', 1300),
+(64, 'UK', 'Australia', 1400),
+(65, 'UK', 'Japan', 1500),
+(66, 'UK', 'China', 1600),
+(67, 'UK', 'Russia', 1700),
+(68, 'UK', 'Egypt', 1800),
+(69, 'UK', 'South Africa', 1900),
+(70, 'UK', 'Brazil', 1000),
+(71, 'Australia', 'Japan', 1100),
+(72, 'Australia', 'China', 1200),
+(73, 'Australia', 'Russia', 1300),
+(74, 'Australia', 'Egypt', 1400),
+(75, 'Australia', 'South Africa', 1500),
+(76, 'Australia', 'Brazil', 1600),
+(77, 'Japan', 'China', 1700),
+(78, 'Japan', 'Russia', 1800),
+(79, 'Japan', 'Egypt', 1900),
+(80, 'Japan', 'South Africa', 1000),
+(81, 'Japan', 'Brazil', 1100),
+(82, 'China', 'Russia', 1200),
+(83, 'China', 'Egypt', 1300),
+(84, 'China', 'South Africa', 1400),
+(85, 'China', 'Brazil', 1500),
+(86, 'Russia', 'Egypt', 1600),
+(87, 'Russia', 'South Africa', 1700),
+(88, 'Russia', 'Brazil', 1800),
+(89, 'Egypt', 'South Africa', 1900),
+(90, 'Egypt', 'Brazil', 1000),
+(91, 'South Africa', 'Brazil', 1100);
 
 -- --------------------------------------------------------
 
@@ -525,6 +525,12 @@ ALTER TABLE `parcel`
   ADD KEY `fk_staff_parcel` (`StaffID`);
 
 --
+-- Indexes for table `pricing`
+--
+ALTER TABLE `pricing`
+  ADD PRIMARY KEY (`p_id`);
+
+--
 -- Indexes for table `staff`
 --
 ALTER TABLE `staff`
@@ -565,6 +571,12 @@ ALTER TABLE `online_request`
 --
 ALTER TABLE `parcel`
   MODIFY `TrackingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=992827;
+
+--
+-- AUTO_INCREMENT for table `pricing`
+--
+ALTER TABLE `pricing`
+  MODIFY `p_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `users`

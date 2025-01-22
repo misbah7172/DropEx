@@ -1,41 +1,72 @@
 <?php
-    session_start();
-    include("db_connect.php");
-    $tid = '';
-    $error = '';
-    $status = array('Dispatched' => '','Shipped' => '', 'Out_for_delivery' => '', 'Delivered' => '', );
-    $hide = 'hidden';
-    session_start();
-    $trackid = '';
-    if(isset($_POST['track'])){
-        if(empty($_POST['tid'])){
-            $error = "*Required";
-        }else{
-            $tid = $_POST['tid'];
-            $_SESSION['track_tid'] = $tid;
-            if(empty($error)){
-                $hide = '';
-                $trackid = $_SESSION['track_tid'];
-                $sql = "SELECT * FROM status WHERE TrackingID='$tid'";
-                $result = mysqli_query($conn, $sql);
-                if(mysqli_num_rows($result) > 0){
-                    $status = mysqli_fetch_assoc($result);
-                    $active = array();
-                    if(! is_null($status['Delivered'])){
-                        $active['Delivered'] = $active['Out_for_delivery'] = $active['Shipped'] = 'active';
-                    }elseif(! is_null($status['Out_for_delivery'])){
-                        $active['Delivered'] = '';
-                        $active['Out_for_delivery'] = $active['Shipped'] = 'active';
-                    }elseif(! is_null($status['Shipped'])){
-                        $active['Delivered'] = $active['Out_for_delivery'] = '';
-                        $active['Shipped'] = 'active';
-                    }
-                }else{
-                    $error = "Invalid Tracking ID";
+// Start output buffering to prevent headers already sent error
+ob_start();
+
+// Start session only once
+session_start();
+
+// Include database connection
+require_once "db_connect.php";
+
+// Initialize variables
+$tid = '';
+$error = '';
+$status = array('Dispatched' => '','Shipped' => '', 'Out_for_delivery' => '', 'Delivered' => '');
+$hide = 'hidden';
+$trackid = '';
+$user_name = '';
+
+// Get user name if logged in
+if(isset($_SESSION['user_id'])) {
+    // Assuming you have a users table with a username/name column
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT username FROM users WHERE id = ?"; // Use appropriate column name
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($row = $result->fetch_assoc()) {
+        $user_name = $row['username'];
+    }
+    $stmt->close();
+}
+
+// Rest of your tracking logic
+if(isset($_POST['track'])) {
+    if(empty($_POST['tid'])) {
+        $error = "*Required";
+    } else {
+        $tid = $_POST['tid'];
+        $_SESSION['track_tid'] = $tid;
+        if(empty($error)) {
+            $hide = '';
+            $trackid = $_SESSION['track_tid'];
+            // Use prepared statement to prevent SQL injection
+            $sql = "SELECT * FROM status WHERE TrackingID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $tid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result->num_rows > 0) {
+                $status = $result->fetch_assoc();
+                $active = array();
+                if(!is_null($status['Delivered'])) {
+                    $active['Delivered'] = $active['Out_for_delivery'] = $active['Shipped'] = 'active';
+                } elseif(!is_null($status['Out_for_delivery'])) {
+                    $active['Delivered'] = '';
+                    $active['Out_for_delivery'] = $active['Shipped'] = 'active';
+                } elseif(!is_null($status['Shipped'])) {
+                    $active['Delivered'] = $active['Out_for_delivery'] = '';
+                    $active['Shipped'] = 'active';
                 }
+            } else {
+                $error = "Invalid Tracking ID";
             }
+            $stmt->close();
         }
     }
+}
     $hidden = 'hidden';
     if(isset($_POST['view'])){
         $trackid = $_SESSION['track_tid'];

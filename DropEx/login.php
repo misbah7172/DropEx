@@ -1,13 +1,18 @@
 <?php 
+    // Start output buffering to prevent headers already sent error
+    ob_start();
+    
+    // Start session first
     session_start();
+    
+    // Include database connection
+    require_once "db_connect.php";
     
     // Redirect if session already exists
     if(isset($_SESSION['id'])) {
         header("Location: staff.php");
         exit();
     }
-    
-    include("db_connect.php");
     
     $id = $pass = '';
     $errors = array('id' => '', 'pass' => '', 'login' => '');
@@ -112,7 +117,7 @@
                 </div>
                 <div class="form-group text-left">
                     <label style="font-size: 16px; color: #fff;">Password : </label><br>
-                    <input type="password" class="form-control" style="border-radius: 8px; padding-left: 10px;" name="pass" value="<?php echo htmlspecialchars($pass)?>">
+                    <input type="password" class="form-control" style="border-radius: 8px; padding-left: 10px;" name="pass">
                     <label class="text-danger"><?php echo $errors['pass'];?></label>
                 </div>
                 <?php if($errors['login']): ?>
@@ -135,4 +140,7 @@
         </div>
     </body>
 </html>
-<?php mysqli_close($conn); ?>
+<?php 
+mysqli_close($conn);
+ob_end_flush(); 
+?>

@@ -120,40 +120,99 @@ if(isset($_POST['track'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body class="font-sans bg-gray-100">
-        
-        <?php if(isset($_SESSION['user_id'])): ?>
-            <nav class="bg-white shadow-md mb-10">
-                <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-                    <a class="flex items-center" href="#">
-                        <img src="Images/logo.png" class="h-12">
+
+
+
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo Section -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.php" class="flex items-center group">
+                        <img src="Images/logo.png" class="h-8 w-8 md:h-10 md:w-10 rounded-full transition-all duration-300 group-hover:scale-110" alt="DropEx Logo">
+                        <span class="ml-2 md:ml-3 text-xl md:text-2xl font-bold text-white tracking-wider">DropEx</span>
                     </a>
-                    <div class="flex items-center space-x-4">
-                        <a class="text-gray-700 hover:text-blue-500" href="user_dashboard.php">Dashboard</a>
-                        <span class="text-gray-700">Welcome, <?php echo htmlspecialchars($user_name); ?></span>
-                        <a class="text-red-500 hover:text-red-700" href="user_logout.php">Logout</a>
-                    </div>
                 </div>
-            </nav>
-        <?php else: ?>
-            <nav class="bg-white shadow-md mb-10">
-                <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-                    <a class="flex items-center" href="index.php">
-                        <img src="Images/logo.png" class="h-12">
-                    </a>
-                    <div class="flex items-center space-x-4">
-                        <a class="text-gray-700 hover:text-blue-500" href="index.php">Home</a>
-                        <a class="text-gray-700 hover:text-blue-500" href="tracking.php">Tracking</a>
-                        <a class="text-gray-700 hover:text-blue-500" href="branches.php">Branches</a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                    <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
+                    <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
+                    
+                    <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
                         <?php if(isset($_SESSION['id'])): ?>
-                            <a class="text-gray-700 hover:text-blue-500" href="staff.php">Dashboard</a>
-                            <a class="text-red-500 hover:text-red-700" href="logout.php">Logout</a>
+                            <a href="staff.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Dashboard</a>
                         <?php else: ?>
-                            <a class="text-blue-500 hover:text-blue-700" href="login.php">DropEx Login</a>
+                            <a href="user_dashboard.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Dashboard</a>
                         <?php endif; ?>
-                    </div>
+                        <a href="logout.php" class="text-red-200 hover:text-red-400 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium shadow-md">Login</a>
+                    <?php endif; ?>
                 </div>
-            </nav>
-        <?php endif; ?>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" type="button" class="text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden fixed inset-x-0 top-16 bg-blue-600 transform -translate-x-full transition-transform duration-300 ease-in-out">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                <a href="index.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="tracking.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Tracking</a>
+                <a href="branches.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Branches</a>
+                
+                <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
+                    <?php if(isset($_SESSION['id'])): ?>
+                        <a href="staff.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                    <?php else: ?>
+                        <a href="user_dashboard.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                    <?php endif; ?>
+                    <a href="logout.php" class="block text-red-200 hover:bg-red-400 px-3 py-2 rounded-md text-base font-medium">Logout</a>
+                <?php else: ?>
+                    <a href="login.php" class="block bg-white text-blue-600 hover:bg-gray-200 px-4 py-2 rounded-md text-base font-medium shadow-md">Login</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Toggle mobile menu
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('-translate-x-full');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.add('-translate-x-full');
+            }
+        });
+
+        // Close menu when a link is clicked
+        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('-translate-x-full');
+            });
+        });
+    });
+    </script>
+<div class="mt-20"></div>
+        
 
         <div class="container mx-auto mt-10">
             <div class="flex flex-wrap">
@@ -209,7 +268,7 @@ if(isset($_POST['track'])) {
                 </div>
             </div>
         </div>
-        <footer class="text-center p-4 bg-blue-600 text-white mt-5">
+        <footer class="text-center p-4 bg-blue-600 text-white fixed bottom-0 w-full">
             <p>&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
         </footer>
     </body>

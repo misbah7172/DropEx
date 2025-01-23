@@ -81,7 +81,6 @@
             
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
-                <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
                 <a href="tracking.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Tracking</a>
                 <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
                 
@@ -111,7 +110,6 @@
     <!-- Mobile Menu -->
     <div id="mobile-menu" class="md:hidden fixed inset-x-0 top-16 bg-blue-600 transform -translate-x-full transition-transform duration-300 ease-in-out">
         <div class="px-4 pt-4 pb-6 space-y-2">
-            <a href="index.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Home</a>
             <a href="tracking.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Tracking</a>
             <a href="branches.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Branches</a>
             
@@ -156,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
 
     <!-- Hero Section -->
     <div class="pt-16 bg-gradient-to-r from-blue-50 to-indigo-50">

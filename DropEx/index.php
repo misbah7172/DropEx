@@ -67,59 +67,92 @@
     </style>
 </head>
 <body class="min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-white shadow-sm fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="index.php" class="flex-shrink-0">
-                        <img class="h-12 w-auto" src="Images/logo.png" alt="DropEx Logo">
-                    </a>
-                </div>
-                <div class="hidden md:flex md:items-center md:space-x-8">
-                    <a href="index.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="tracking.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Tracking</a>
-                    <a href="branches.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Branches</a>
+<!-- Navbar -->
+<nav class="bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+            <!-- Logo Section with Responsive Sizing -->
+            <div class="flex items-center space-x-3">
+                <a href="index.php" class="flex items-center group">
+                    <img src="Images/logo.png" class="h-8 w-8 md:h-10 md:w-10 rounded-full transition-all duration-300 group-hover:scale-110 group-hover:rotate-6" alt="DropEx Logo">
+                    <span class="ml-2 md:ml-3 text-xl md:text-2xl font-bold text-white tracking-wider">DropEx</span>
+                </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                <div class="flex items-center space-x-4 lg:space-x-6">
+                    <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
+                    <a href="tracking.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Tracking</a>
+                    <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
+                    
                     <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
                         <?php if(isset($_SESSION['id'])): ?>
-                            <a href="staff.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="staff.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Dashboard</a>
                         <?php else: ?>
-                            <a href="user_dashboard.php" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                            <a href="user_dashboard.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Dashboard</a>
                         <?php endif; ?>
-                        <a href="logout.php" class="text-red-600 hover:text-red-800 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                        <a href="logout.php" class="text-red-200 hover:text-red-400 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Logout</a>
                     <?php else: ?>
-                        <a href="login.php" class="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                        <a href="login.php" class="bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700 transition-all duration-300 px-3 py-1.5 rounded-md text-sm font-medium shadow-md">Login</a>
                     <?php endif; ?>
-                </div>
-                <div class="md:hidden flex items-center">
-                    <button type="button" class="mobile-menu-button bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
                 </div>
             </div>
+            
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-toggle" class="mobile-menu-button bg-blue-600 text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-500 transition-all duration-300 hover:bg-blue-700" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <!-- Mobile menu -->
-        <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="index.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Home</a>
-                <a href="tracking.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Tracking</a>
-                <a href="branches.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Branches</a>
-                <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
-                    <?php if(isset($_SESSION['id'])): ?>
-                        <a href="staff.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
-                    <?php else: ?>
-                        <a href="user_dashboard.php" class="text-gray-900 hover:bg-gray-100 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
-                    <?php endif; ?>
-                    <a href="logout.php" class="text-red-600 hover:bg-red-50 block px-3 py-2 rounded-md text-base font-medium">Logout</a>
+    </div>
+    
+    <!-- Mobile Menu (Improved Responsiveness) -->
+    <div id="mobile-menu" class="md:hidden fixed inset-x-0 top-16 bg-gradient-to-r from-blue-500 to-blue-600 transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <div class="px-2 pt-2 pb-3 space-y-1">
+            <a href="index.php" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Home</a>
+            <a href="tracking.php" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Tracking</a>
+            <a href="branches.php" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Branches</a>
+            
+            <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
+                <?php if(isset($_SESSION['id'])): ?>
+                    <a href="staff.php" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Dashboard</a>
                 <?php else: ?>
-                    <a href="login.php" class="bg-blue-600 text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium">Login</a>
+                    <a href="user_dashboard.php" class="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Dashboard</a>
                 <?php endif; ?>
-            </div>
+                <a href="logout.php" class="text-red-200 hover:bg-red-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300">Logout</a>
+            <?php else: ?>
+                <a href="login.php" class="bg-white text-blue-600 hover:bg-gray-200 block px-4 py-2 rounded-md text-base font-medium shadow-md transition-all duration-300">Login</a>
+            <?php endif; ?>
         </div>
-    </nav>
+    </div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuToggle.addEventListener('click', function() {
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !isExpanded);
+        mobileMenu.classList.toggle('-translate-x-full');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!mobileMenu.contains(event.target) && !mobileMenuToggle.contains(event.target) && !isExpanded) {
+            mobileMenu.classList.add('-translate-x-full');
+            mobileMenuToggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+});
+</script>
+
 
     <!-- Hero Section -->
     <div class="pt-16 bg-gradient-to-r from-blue-50 to-indigo-50">

@@ -222,13 +222,13 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="style/bootstrap.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="style/index_styles.css">
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style/index_styles.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         input[type="text"] {
             border-radius: 8px;
@@ -240,254 +240,342 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
         }
     </style>
 </head>
-<body class="font-sans bg-gray-100">
-    <div class="container mx-auto">
-        <div class="flex justify-between items-center py-4">
-            <div class="flex items-center">
-                <a href="index.php">
-                    <img src="Images/logo.png" id="logo" class="h-24">
-                </a>
-            </div>
-            <div class="relative">
-                <button id="profileDropdown" class="flex items-center bg-white border border-gray-300 rounded-lg px-4 py-2">
-                    <img src="Images/pp2.png" id="logo" class="h-16 rounded-full object-cover">
-                    <span class="ml-2"><?php echo $name ?></span>
-                </button>
-                <ul id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg hidden">
-                    <li><a href="account.php" class="block px-4 py-2 text-black hover:bg-gray-200">Account</a></li>
-                    <li><a href="logout.php" class="block px-4 py-2 text-black hover:bg-gray-200">Logout</a></li>
-                </ul>
-                <script>
-                    document.getElementById('profileDropdown').addEventListener('click', function() {
-                        document.getElementById('dropdownMenu').classList.toggle('hidden');
-                    });
+<body class="font-sans bg-gray-100">    
+        <!-- Navbar -->
+        <nav class="bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg fixed w-full z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <!-- Logo Section -->
+                    <div class="flex items-center space-x-3">
+                        <a href="index.php" class="flex items-center group">
+                            <img src="Images/logo.png" class="h-8 w-8 md:h-10 md:w-10 rounded-full transition-all duration-300 group-hover:scale-110" alt="DropEx Logo">
+                            <span class="ml-2 md:ml-3 text-xl md:text-2xl font-bold text-white tracking-wider">DropEx</span>
+                        </a>
+                    </div>
                     
-                    // Close dropdown when clicking outside
-                    window.addEventListener('click', function(e) {
-                        if (!e.target.closest('.relative')) {
-                            document.getElementById('dropdownMenu').classList.add('hidden');
-                        }
-                    });
-                </script>
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                        <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
+                        <a href="tracking.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Tracking</a>
+                        <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
+                            <?php
+                            // Query to count pending requests
+                            $pendingCount = 0;
+                            $sql = "SELECT COUNT(*) as count FROM online_request WHERE status='pending'";
+                            $result = mysqli_query($conn, $sql);
+                            if($result) {
+                                $row = mysqli_fetch_assoc($result);
+                                $pendingCount = $row['count'];
+                            }
+                            ?>
+                            <a class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium" href="staff_request_approval.php" style="color: black; position: relative;">
+                                Pending Request
+                                <?php if($pendingCount > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                                        style="font-size: 0.7em; margin-left: -10px;">
+                                        <?php echo $pendingCount; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        <a href="account.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Account</a>
+                        <a href="logout.php" class="text-red-200 hover:text-red-400 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Logout</a>
+                    </div>
+
+                    <!-- Staff Greeting -->
+                    <div class="md:flex items-center">
+                        <span class="text-white text-sm">
+                            Welcome, <?php echo htmlspecialchars($name); ?>
+                        </span>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" type="button" class="text-white focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="bg-white p-4 rounded-lg shadow-md">
-            <ul class="flex justify-center space-x-4">
-                <li><a class="text-black font-semibold py-2 px-4 rounded-lg bg-gray-200" data-toggle="tab" href="#ins">New Order</a></li>
-                <li><a class="text-black py-2 px-4 rounded-lg hover:bg-gray-200" href="staff_request_approval.php">Pending Request</a></li>
-                <li><a class="text-black py-2 px-4 rounded-lg hover:bg-gray-200" data-toggle="tab" href="#update">Update Order</a></li>
-                <li><a class="text-black py-2 px-4 rounded-lg hover:bg-gray-200" data-toggle="tab" href="#cons">Invoice</a></li>
-                <li><a class="text-black py-2 px-4 rounded-lg hover:bg-gray-200" href="account.php">Profile</a></li>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden fixed inset-x-0 top-16 bg-blue-600 transform -translate-x-full transition-transform duration-300 ease-in-out">
+                <div class="px-4 pt-4 pb-6 space-y-2">
+                    <a href="index.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Home</a>
+                    <a href="tracking.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Tracking</a>
+                    <a href="branches.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Branches</a>
+                    <a href="account.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Account</a>
+                    <a href="logout.php" class="block text-red-200 hover:bg-red-700 px-3 py-2 rounded-md text-base font-medium">Logout</a>
+                </div>
+            </div>
+        </nav>
+        <div class="pt-20"></div>
+
+
+        <div class="container mt-10">
+            <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="ins-tab" data-toggle="tab" href="#ins" role="tab" aria-controls="ins" aria-selected="true" style="color: black;">New Order</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="update-tab" data-toggle="tab" href="#update" role="tab" aria-controls="update" aria-selected="false" style="color: black;">Update Order</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="cons-tab" data-toggle="tab" href="#cons" role="tab" aria-controls="cons" aria-selected="false" style="color: black;">Invoice</a>
+                </li>
+                
+
             </ul>
-            <div class="tab-content mt-4">
-                <div class="tab-pane fade show active" id="ins">
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active pt-3" id="ins" role="tabpanel" aria-labelledby="ins-tab">
                     <div class="container">
                         <form action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form" method="POST">
-                            <div class="flex space-x-4">
-                                <div class="w-1/2 p-4 bg-white rounded-lg shadow-md">
-                                    <h3 class="mb-3 text-lg font-semibold">Sender's Details</h3>
-                                    <div class="mb-4">
-                                        <label>Name:</label>
-                                        <input type="text" name="sname" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>Address:</label>
-                                        <input type="text" name="sadd" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>City:</label>
-                                        <input type="text" name="scity" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>State:</label>
-                                        <input type="text" name="sstate" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>Contact:</label>
-                                        <input type="text" name="scontact" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
+                            <div class="row text-center">
+                            <div class="col-md-6 p-3" style="background-color: rgba(255, 255, 255, 0.7);">
+                                <h3 class="mb-3">Sender's Details</h3>
+                                <div class="form-group text-left pl-5">
+                                    <label>Name    : </label>
+                                    <input type="text" name="sname">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
                                 </div>
-                                <div class="w-1/2 p-4 bg-white rounded-lg shadow-md">
-                                    <h3 class="mb-3 text-lg font-semibold">Receiver's Details</h3>
-                                    <div class="mb-4">
-                                        <label>Name:</label>
-                                        <input type="text" name="rname" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>Address:</label>
-                                        <input type="text" name="radd" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>City:</label>
-                                        <input type="text" name="rcity" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>State:</label>
-                                        <input type="text" name="rstate" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>Contact:</label>
-                                        <input type="text" name="rcontact" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label>Weight:</label>
-                                        <input type="text" name="wgt" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['req'];?></label>
-                                    </div>
-                                    <input type="submit" name="submit" value="Place order" class="bg-blue-500 text-white rounded-lg px-4 py-2">
+                                <div class="form-group text-left pl-5">
+                                    <label>Address : </label>
+                                    <input type="text" name="sadd">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
                                 </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>City    : </label>
+                                    <input type="text" name="scity"> 
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>State : </label>
+                                    <input type="text" name="sstate">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>Contact : </label>
+                                    <input type="text" name="scontact">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 p-3" style="background-color: rgba(255, 255, 255, 0.7);">
+                                <h3 class="mb-3">Receiver's Details</h3>
+                                <div class="form-group text-left pl-5">
+                                    <label>Name : </label>
+                                    <input type="text" name="rname">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>Address : </label>
+                                    <input type="text" name="radd">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>City : </label>
+                                    <input type="text" name="rcity">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>State : </label>
+                                    <input type="text" name="rstate">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>Contact : </label>
+                                    <input type="text" name="rcontact">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <div class="form-group text-left pl-5">
+                                    <label>Weight : </label>
+                                    <input type="text" name="wgt">
+                                    <label class="text-danger"><?php echo $errors['req'];?></label>
+                                </div>
+                                <input type="submit" name="submit" value="Place order" class="bt bt-primary">
+                            </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="update">
+                <div class="tab-pane fade" id="update" role="tabpanel" aria-labelledby="update-tab">
                     <div class="container mt-10">
-                        <div class="flex space-x-4">
-                            <div class="w-1/3 p-4 bg-white rounded-lg shadow-md">
-                                <form action="" method="POST" class="form">
-                                    <div class="mb-4">
-                                        <label class="text-lg">Tracking ID:</label>
-                                        <input type="text" name="inp_tid" value="<?php echo $_SESSION['up_tid'] ?? $status['TrackingID']??'' ; ?>" class="mt-1 block w-full border border-gray-300 rounded-lg p-2">
-                                        <label class="text-red-500"><?php echo $errors['status']??'';?></label>
+                        <div class="row">
+                            <div class="col-4 p-4 text-center pt-0" style="background-color: rgba(255, 255, 255, 0.7); margin-top: 20px;">
+                                 <form action="" method="POST" class="form">
+                                    <div class="form-group">
+                                        <label style="font-size: 20px;">Tracking ID : </label>
+                                        <input type="text" name="inp_tid" value="<?php echo $_SESSION['up_tid'] ?? $status['TrackingID']??'' ; ?>">
+                                        <label class="text-danger"><?php echo $errors['status']??'';?></label>
                                     </div>
-                                    <input type="submit" name="sel_order" class="bg-blue-500 text-white rounded-lg px-4 py-2" value="Select">
+                                    <input type="submit" name="sel_order" class="btn btn-light text-center" value="Select" style="font-size: 20px;">
                                 </form>
                             </div>
-                            <div class="w-2/3 p-4 bg-white rounded-lg shadow-md">
-                                <h3 class="text-lg font-semibold pb-2 mb-3 border-b">Order Details</h3>
+                            <div class="col-8 p-4 " style="background-color: rgba(255, 255, 255, 0.7); margin-top: 20px; ">
+                                <h3 class="display-6 text-center pb-2 mb-3" style="border-bottom: 2px solid black;">Order Details</h3>
                                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST" class="form">
-                                    <div class="mb-4">
-                                        <label>Tracking ID:</label>
+                                    <div class="form-group">
+                                        <label>Tracking ID : </label>
                                         <label><?php echo $_SESSION['up_tid'] ?? $status['TrackingID']??'' ; ?></label>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="form-group">
                                         <input type='checkbox' name='status_upd' value ="dispatched" disabled>  
-                                        <label>Dispatched</label>
+                                        <label>Dispatched  </label>
                                         <?php echo $status['disp']; ?>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="form-group">
                                         <input type='checkbox' name='status_upd' value ="shipped" <?php echo $disable_ship ?>>
-                                        <label>Shipped</label>
+                                        <label>Shipped </label>
                                         <?php echo $status['ship']; ?>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="form-group">
                                         <input type='checkbox' name='status_upd' value ="out_for_delivery" <?php echo $disable_out ?>>
-                                        <label>Out for Delivery</label>
+                                        <label>Out for Delivery  </label>
                                         <?php echo $status['out']; ?>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="form-group">
                                         <input type='checkbox' name='status_upd' value ="delivered" <?php echo $disable_del ?>>
-                                        <label>Delivered</label>
+                                        <label>Delivered  </label>
                                         <?php echo $status['del']; ?>
                                     </div>
-                                    <input type="submit" name="update" value="Update Details" class="bg-blue-500 text-white rounded-lg px-4 py-2">
+                                    <input type="submit" name="update" value="Update Details" class="btn btn-light">
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="cons">
-                    <ul class="flex space-x-4">
-                        <li><a class="text-black font-semibold py-2 px-4 rounded-lg bg-gray-200" data-toggle="tab" href="#arr">Arrived</a></li>
-                        <li><a class="text-black py-2 px-4 rounded-lg hover:bg-gray-200" data-toggle="tab" href="#del">Delivered</a></li>
-                    </ul>
-                    <div class="tab-content mt-4">
-                        <div class="tab-pane fade show active" id="arr">
-                            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-                                <thead class="bg-gray-200">
-                                    <tr>
-                                        <th class="border px-4 py-2">TrackingID</th>
-                                        <th class="border px-4 py-2">StaffID</th>
-                                        <th class="border px-4 py-2">Sender</th>
-                                        <th class="border px-4 py-2">Receiver</th>
-                                        <th class="border px-4 py-2">Weight</th>
-                                        <th class="border px-4 py-2">Price</th>
-                                        <th class="border px-4 py-2">Dispatched</th>
-                                        <th class="border px-4 py-2">Shipped</th>
-                                        <th class="border px-4 py-2">Out for delivery</th>
-                                        <th class="border px-4 py-2">Delivered</th>
-                                    </tr>
+                <div class="tab-pane fade" id="cons" role="tabpanel" aria-labelledby="cons-tab">
+                    <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link active" id="arr-tab" data-toggle="tab" href="#arr" role="tab" aria-controls="arr" aria-selected="true" style="color: black;">Arrived</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                          <a class="nav-link" id="del-tab" data-toggle="tab" href="#del" role="tab" aria-controls="del" aria-selected="false" style="color: black;">Delivered</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content b-0" id="myTabContent">
+                        <div class="tab-pane fade show active" id="arr" role="tabpanel" aria-labelledby="arr-tab">
+                            <table class="table table-hover table-bordered table-striped table-hover" style="background-color: rgba(255, 255, 255, 0.8);">
+                                <thead class="thead-dark">
+                                    <tr class="table-info"><td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td><td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td><td>Out for delivery</td><td>Delivered</td></tr>                    
                                 </thead>
                                 <tbody>
                                     <?php foreach($arr as $order): ?>
                                     <tr>
-                                        <td class="border px-4 py-2"><?php echo $order['TrackingID'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['StaffID'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Weight_Kg'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Price'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Dispatched_Time'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Shipped'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Out_for_delivery'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Delivered'];?></td>
+                                        <td><?php echo $order['TrackingID'];?></td>
+                                        <td><?php echo $order['StaffID'];?></td>
+                                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
+                                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
+                                        <td><?php echo $order['Weight_Kg'];?></td>
+                                        <td><?php echo $order['Price'];?></td>
+                                        <td><?php echo $order['Dispatched_Time'];?></td>
+                                        <td><?php echo $order['Shipped'];?></td>
+                                        <td><?php echo $order['Out_for_delivery'];?></td>
+                                        <td><?php echo $order['Delivered'];?></td>
                                     </tr>
                                     <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane fade" id="del">
-                            <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-                                <thead class="bg-gray-200">
-                                    <tr>
-                                        <th class="border px-4 py-2">TrackingID</th>
-                                        <th class="border px-4 py-2">StaffID</th>
-                                        <th class="border px-4 py-2">Sender</th>
-                                        <th class="border px-4 py-2">Receiver</th>
-                                        <th class="border px-4 py-2">Weight</th>
-                                        <th class="border px-4 py-2">Price</th>
-                                        <th class="border px-4 py-2">Dispatched</th>
-                                        <th class="border px-4 py-2">Shipped</th>
-                                        <th class="border px-4 py-2">Out for delivery</th>
-                                        <th class="border px-4 py-2">Delivered</th>
-                                    </tr>
+                        <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
+                        <table class="table table-hover table-bordered table-striped table-hover" style="background-color: rgba(255, 255, 255, 0.8);" >
+                                <thead class="thead-dark">
+                                    <tr class="table-info"><td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td><td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td><td>Out for delivery</td><td>Delivered</td></tr>                    
                                 </thead>
                                 <tbody>
                                     <?php foreach($delivered as $order): ?>
                                     <tr>
-                                        <td class="border px-4 py-2"><?php echo $order['TrackingID'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['StaffID'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Weight_Kg'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Price'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Dispatched_Time'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Shipped'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Out_for_delivery'];?></td>
-                                        <td class="border px-4 py-2"><?php echo $order['Delivered'];?></td>
+                                        <td><?php echo $order['TrackingID'];?></td>
+                                        <td><?php echo $order['StaffID'];?></td>
+                                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
+                                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
+                                        <td><?php echo $order['Weight_Kg'];?></td>
+                                        <td><?php echo $order['Price'];?></td>
+                                        <td><?php echo $order['Dispatched_Time'];?></td>
+                                        <td><?php echo $order['Shipped'];?></td>
+                                        <td><?php echo $order['Out_for_delivery'];?></td>
+                                        <td><?php echo $order['Delivered'];?></td>
                                     </tr>
                                     <?php endforeach;?>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                      </div>
+                      
                 </div>
-            </div>
+              </div>
+              <script>
+                $(function() { 
+                    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                        localStorage.setItem('lastTab', $(this).attr('href'));
+                    });
+                    var lastTab = localStorage.getItem('lastTab');
+                    if (lastTab) {
+                        $('[href="' + lastTab + '"]').tab('show');
+                    }   
+                });
+              </script>
         </div>
-        <footer class="text-center py-4 bg-blue-600 text-white mt-4">
-            <p>&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
-        </footer>
-    </div>
+          
+       <style>
+         footer {
+            text-align: center;
+            padding: 20px;
+            background: #0056b3;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+    </style>
+    <footer>
+        <p>&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
+    </footer>
     <script>
-        $(function() { 
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                localStorage.setItem('lastTab', $(this).attr('href'));
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            // Toggle mobile menu
+            mobileMenuButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('-translate-x-full');
             });
-            var lastTab = localStorage.getItem('lastTab');
-            if (lastTab) {
-                $('[href="' + lastTab + '"]').tab('show');
-            }   
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                    mobileMenu.classList.add('-translate-x-full');
+                }
+            });
+
+            // Close menu when a link is clicked
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('-translate-x-full');
+                });
+            });
         });
-    </script>
+        </script>
+
+        <script>
+            const profileDropdown = document.getElementById('profileDropdown');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+            if (!profileDropdown.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+            });
+        </script>
 </body>
 </html>

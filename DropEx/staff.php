@@ -258,25 +258,32 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
                         <a href="tracking.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Tracking</a>
                         <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
-                            <?php
-                            // Query to count pending requests
-                            $pendingCount = 0;
-                            $sql = "SELECT COUNT(*) as count FROM online_request WHERE status='pending'";
-                            $result = mysqli_query($conn, $sql);
-                            if($result) {
-                                $row = mysqli_fetch_assoc($result);
-                                $pendingCount = $row['count'];
-                            }
-                            ?>
-                            <a class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium" href="staff_request_approval.php" style="color: black; position: relative;">
-                                Pending Request
-                                <?php if($pendingCount > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
-                                        style="font-size: 0.7em; margin-left: -10px;">
-                                        <?php echo $pendingCount; ?>
-                                    </span>
-                                <?php endif; ?>
-                            </a>
+                        <?php
+                        // Query to count pending requests specific to staff's state
+                        $pendingCount = 0;
+                        $countsql = "SELECT COUNT(*) as count 
+                                    FROM online_request o
+                                    JOIN staff s ON o.S_State = s.Branch 
+                                    WHERE o.status='pending' AND s.StaffID = ?";
+                        $stmt = mysqli_prepare($conn, $countsql);
+                        mysqli_stmt_bind_param($stmt, "s", $_SESSION['id']);
+                        mysqli_stmt_execute($stmt);
+                        $result = mysqli_stmt_get_result($stmt);
+
+                        if($result) {
+                            $row = mysqli_fetch_assoc($result);
+                            $pendingCount = $row['count'];
+                        }
+                        ?>
+                        <a class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium" href="staff_request_approval.php" style="color: black; position: relative;">
+                            Pending Request
+                            <?php if($pendingCount > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="font-size: 0.7em; margin-left: -10px;">
+                            <?php echo $pendingCount; ?>
+                            </span>
+                            <?php endif; ?>
+                        </a>
                         <a href="account.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Account</a>
                         <a href="logout.php" class="text-red-200 hover:text-red-400 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Logout</a>
                     </div>
@@ -444,65 +451,120 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="cons" role="tabpanel" aria-labelledby="cons-tab">
-                    <ul class="nav nav-tabs" id="myTab2" role="tablist">
-                        <li class="nav-item" role="presentation">
-                          <a class="nav-link active" id="arr-tab" data-toggle="tab" href="#arr" role="tab" aria-controls="arr" aria-selected="true" style="color: black;">Arrived</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                          <a class="nav-link" id="del-tab" data-toggle="tab" href="#del" role="tab" aria-controls="del" aria-selected="false" style="color: black;">Delivered</a>
-                        </li>
-                      </ul>
-                      <div class="tab-content b-0" id="myTabContent">
-                        <div class="tab-pane fade show active" id="arr" role="tabpanel" aria-labelledby="arr-tab">
-                            <table class="table table-hover table-bordered table-striped table-hover" style="background-color: rgba(255, 255, 255, 0.8);">
-                                <thead class="thead-dark">
-                                    <tr class="table-info"><td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td><td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td><td>Out for delivery</td><td>Delivered</td></tr>                    
-                                </thead>
-                                <tbody>
-                                    <?php foreach($arr as $order): ?>
-                                    <tr>
-                                        <td><?php echo $order['TrackingID'];?></td>
-                                        <td><?php echo $order['StaffID'];?></td>
-                                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
-                                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
-                                        <td><?php echo $order['Weight_Kg'];?></td>
-                                        <td><?php echo $order['Price'];?></td>
-                                        <td><?php echo $order['Dispatched_Time'];?></td>
-                                        <td><?php echo $order['Shipped'];?></td>
-                                        <td><?php echo $order['Out_for_delivery'];?></td>
-                                        <td><?php echo $order['Delivered'];?></td>
-                                    </tr>
-                                    <?php endforeach;?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
-                        <table class="table table-hover table-bordered table-striped table-hover" style="background-color: rgba(255, 255, 255, 0.8);" >
-                                <thead class="thead-dark">
-                                    <tr class="table-info"><td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td><td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td><td>Out for delivery</td><td>Delivered</td></tr>                    
-                                </thead>
-                                <tbody>
-                                    <?php foreach($delivered as $order): ?>
-                                    <tr>
-                                        <td><?php echo $order['TrackingID'];?></td>
-                                        <td><?php echo $order['StaffID'];?></td>
-                                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
-                                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
-                                        <td><?php echo $order['Weight_Kg'];?></td>
-                                        <td><?php echo $order['Price'];?></td>
-                                        <td><?php echo $order['Dispatched_Time'];?></td>
-                                        <td><?php echo $order['Shipped'];?></td>
-                                        <td><?php echo $order['Out_for_delivery'];?></td>
-                                        <td><?php echo $order['Delivered'];?></td>
-                                    </tr>
-                                    <?php endforeach;?>
-                                </tbody>
-                            </table>
-                        </div>
-                      </div>
-                      
-                </div>
+                <!-- HTML Modifications -->
+<div class="tab-pane fade" id="cons" role="tabpanel" aria-labelledby="cons-tab">
+    <!-- Add search input fields -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" id="staffIdSearch" class="form-control" placeholder="Search by Staff ID">
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="senderNameSearch" class="form-control" placeholder="Search by Sender Name">
+        </div>
+    </div>
+
+    <ul class="nav nav-tabs" id="myTab2" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="arr-tab" data-toggle="tab" href="#arr" role="tab" aria-controls="arr" aria-selected="true" style="color: black;">Arrived</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="del-tab" data-toggle="tab" href="#del" role="tab" aria-controls="del" aria-selected="false" style="color: black;">Delivered</a>
+        </li>
+    </ul>
+    <div class="tab-content b-0" id="myTabContent">
+        <div class="tab-pane fade show active" id="arr" role="tabpanel" aria-labelledby="arr-tab">
+            <table class="table table-hover table-bordered table-striped" id="arrivedTable" style="background-color: rgba(255, 255, 255, 0.8);">
+                <thead class="thead-dark">
+                    <tr class="table-info">
+                        <td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td>
+                        <td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td>
+                        <td>Out for delivery</td><td>Delivered</td>
+                    </tr>                    
+                </thead>
+                <tbody>
+                    <?php foreach($arr as $order): ?>
+                    <tr>
+                        <td><?php echo $order['TrackingID'];?></td>
+                        <td><?php echo $order['StaffID'];?></td>
+                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
+                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
+                        <td><?php echo $order['Weight_Kg'];?></td>
+                        <td><?php echo $order['Price'];?></td>
+                        <td><?php echo $order['Dispatched_Time'];?></td>
+                        <td><?php echo $order['Shipped'];?></td>
+                        <td><?php echo $order['Out_for_delivery'];?></td>
+                        <td><?php echo $order['Delivered'];?></td>
+                    </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
+            <table class="table table-hover table-bordered table-striped" id="deliveredTable" style="background-color: rgba(255, 255, 255, 0.8);">
+                <thead class="thead-dark">
+                    <tr class="table-info">
+                        <td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td>
+                        <td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td>
+                        <td>Out for delivery</td><td>Delivered</td>
+                    </tr>                    
+                </thead>
+                <tbody>
+                    <?php foreach($delivered as $order): ?>
+                    <tr>
+                        <td><?php echo $order['TrackingID'];?></td>
+                        <td><?php echo $order['StaffID'];?></td>
+                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
+                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
+                        <td><?php echo $order['Weight_Kg'];?></td>
+                        <td><?php echo $order['Price'];?></td>
+                        <td><?php echo $order['Dispatched_Time'];?></td>
+                        <td><?php echo $order['Shipped'];?></td>
+                        <td><?php echo $order['Out_for_delivery'];?></td>
+                        <td><?php echo $order['Delivered'];?></td>
+                    </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Search Functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to filter tables
+    function filterTable(tableId, staffIdInput, senderNameInput) {
+        const table = document.getElementById(tableId);
+        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        const staffIdSearchValue = staffIdInput.value.toLowerCase();
+        const senderNameSearchValue = senderNameInput.value.toLowerCase();
+
+        for (let i = 0; i < rows.length; i++) {
+            const staffIdCell = rows[i].getElementsByTagName('td')[1];
+            const senderCell = rows[i].getElementsByTagName('td')[2];
+            
+            const staffIdMatch = staffIdCell.textContent.toLowerCase().includes(staffIdSearchValue);
+            const senderMatch = senderCell.textContent.toLowerCase().includes(senderNameSearchValue);
+
+            // Show row if both search criteria are met (or if search input is empty)
+            rows[i].style.display = (staffIdMatch && senderMatch) ? '' : 'none';
+        }
+    }
+
+    // Get search input elements
+    const staffIdSearchInput = document.getElementById('staffIdSearch');
+    const senderNameSearchInput = document.getElementById('senderNameSearch');
+
+    // Add event listeners for both arrived and delivered tables
+    ['arrivedTable', 'deliveredTable'].forEach(tableId => {
+        const table = document.getElementById(tableId);
+        if (table) {
+            staffIdSearchInput.addEventListener('keyup', () => filterTable(tableId, staffIdSearchInput, senderNameSearchInput));
+            senderNameSearchInput.addEventListener('keyup', () => filterTable(tableId, staffIdSearchInput, senderNameSearchInput));
+        }
+    });
+});
+</script>
               </div>
               <script>
                 $(function() { 
@@ -576,6 +638,27 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 dropdownMenu.classList.add('hidden');
             }
             });
+        </script>
+        <script>
+            window.onload = function() {
+                // Store original form values to check against
+                const originalFormValues = {};
+                document.querySelectorAll('form input[type="text"]').forEach(input => {
+                    originalFormValues[input.name] = input.value;
+                });
+
+                // Clear form on reload
+                if(performance.navigation.type === 1) {
+                    document.querySelectorAll('form input[type="text"]').forEach(input => {
+                        input.value = '';
+                    });
+                }
+
+                // Prevent form resubmission
+                if(window.history.replaceState) {
+                    window.history.replaceState(null, null, window.location.href);
+                }
+            }
         </script>
 </body>
 </html>

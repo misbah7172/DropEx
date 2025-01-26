@@ -214,10 +214,24 @@ if(isset($_POST['track'])) {
 <div class="mt-20"></div>
         
 
-        <div class="container mx-auto mt-10">
+        <div class="container mx-auto mt-10 py-4">
             <div class="flex flex-wrap">
                 <div class="w-full md:w-1/3 p-4 bg-white rounded-lg shadow-md text-center mt-5">
-                    <img src="Images/track.png" class="mx-auto h-64 rounded-lg">
+                    <?php if(!empty($trackid)): 
+                        $img_sql = "SELECT image FROM parcel WHERE TrackingID = ?";
+                        $img_stmt = $conn->prepare($img_sql);
+                        $img_stmt->bind_param("s", $trackid);
+                        $img_stmt->execute();
+                        $img_result = $img_stmt->get_result();
+                        if($img_row = $img_result->fetch_assoc()): ?>
+                            <img src="<?php echo $img_row['image']; ?>" class="mx-auto h-64 rounded-lg">
+                        <?php else: ?>
+                            <img src="Images/track.png" class="mx-auto h-64 rounded-lg">
+                        <?php endif;
+                        $img_stmt->close();
+                    else: ?>
+                        <img src="Images/track.png" class="mx-auto h-64 rounded-lg">
+                    <?php endif; ?>
                     <form action="" method="POST" class="mt-4">
                         <label class="text-lg">Tracking ID:</label>
                         <input type="text" class="mt-2 p-2 border border-gray-300 rounded-lg w-full" name="tid" value="<?php echo $tid; ?>">
@@ -268,7 +282,7 @@ if(isset($_POST['track'])) {
                 </div>
             </div>
         </div>
-        <footer class="text-center p-4 bg-blue-600 text-white fixed bottom-0 w-full">
+        <footer class="py-4 mt-8 text-center bg-gray-800 text-white">
             <p>&copy; 2025 DropEx. All Rights Reserved. | Delivering Beyond Borders</p>
         </footer>
     </body>

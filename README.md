@@ -1,6 +1,7 @@
 <div align="center">
   <img src="DropEx/Images/logo.png" alt="DropEx Logo" width="200" />
-</div>DropEx
+</div>
+<h1>DropEx</h1>
 
   
 

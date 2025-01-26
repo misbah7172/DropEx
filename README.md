@@ -78,15 +78,10 @@ To set up the project locally:
 
 1. Clone the Repository:
 
-git clone
+git clone repository_link
 
 
-2. Install Dependencies:
-
-npm install
-
-
-3. Environment Variables:
+2. Environment Variables:
 
 Create a .env file in the root directory.
 
@@ -102,7 +97,9 @@ DATABASE_URL=your_mysql_connection_string
 
 To run the application locally:
 
-npm start
+start xampp server
+
+cooy and paste the sql code from Mysql to xampp phpadmin panel in sql insert
 
 The application will be accessible at http://localhost:your_desired_port.
 

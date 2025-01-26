@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://your-logo-url" alt="DropEx Logo" width="200" />
+  <img src="DropEx/Images/logo.png" alt="DropEx Logo" width="200" />
 </div>DropEx
 
   

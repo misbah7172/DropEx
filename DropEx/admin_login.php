@@ -1,17 +1,17 @@
 <?php
-// ... PHP code remains the same ...
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DropEx Admin Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-[url('Images/admin.jpg')] bg-cover bg-center bg-no-repeat flex items-center justify-center">
-    <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-lg z-50">
+session_start();
+require_once 'config.php';
+// Check if already logged in
+if(isset($_SESSION['admin_id'])) {
+header("Location: adminDashboard.php");
+exit;
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ $admin_id = $_POST['admin_id'];
+ $password = $_POST['password'];
+// Modified query to match your exact database structure
+ $sql = "SELECT * FROM admin_credentials WHERE admin_id = '$admin_id' AND password = '$password'";
+ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) == 1) {
  $row = mysqli_fetch_assoc($result);
  $_SESSION['admin_id'] = $row['admin_id'];
@@ -79,7 +79,7 @@ background: #0056b3;
  <div class="alert alert-danger"><?php echo $error; ?></div>
 <?php endif; ?>
 <!-- Navbar -->
-<nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-lg z-50">
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-lg z-50">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">

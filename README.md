@@ -45,7 +45,7 @@ Contact
 
 Experience the application live: <a href="https://tinyurl.com/dropex1234">DropEx Live Demo</a>
 
-Technologies Used
+<h2>Development Toolkit </h2>
 
 Frontend:
 
@@ -55,14 +55,10 @@ CSS3
 
 JavaScript (ES6+)
 
-React.js
-
 
 Backend:
 
-Node.js
-
-Express.js
+PHP
 
 
 Database:
@@ -82,8 +78,7 @@ To set up the project locally:
 
 1. Clone the Repository:
 
-git clone https://github.com/your-username/dropex.git
-cd dropex
+git clone
 
 
 2. Install Dependencies:

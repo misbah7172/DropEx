@@ -67,78 +67,104 @@
     }
 ?>
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Drop Ex</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="style/bootstrap.css">
-        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="style/index_styles.css">
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    </head>
-    <body style="font-family: Arial, Helvetica, sans-serif;">
-        <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-default navbar-light mb-10" style="background-color: rgba(255, 255, 255, 0.7); margin-bottom: 20px; margin-top:10px !important;">
-            <div class="container">
-                <a class="navbar-brand" href="index.php">
-                    <img src="Images/logo.png" id="logo" style="height: 50px !important; margin-top: 10px !important;">
-                </a>
-                <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#mainNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <div class="navbar-nav ml-auto" style="font-size: large;">
-                        <a class="nav-item nav-link text-dark mr-5" href="index.php">Home</a>
-                        <a class="nav-item nav-link text-dark mr-5" href="tracking.php">Tracking</a>
-                        <a class="nav-item nav-link text-dark mr-5" href="branches.php">Branches</a>
-                        <a class="nav-item nav-link text-dark active" href="login.php">DropEx Login</a>                        
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DropEx Staff Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-white/70 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <a href="index.php" class="flex-shrink-0">
+                        <img class="h-12" src="Images/logo.png" alt="DropEx Logo">
+                    </a>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="index.php" class="text-gray-700 hover:text-blue-600 px-3 py-2">Home</a>
+                    <a href="tracking.php" class="text-gray-700 hover:text-blue-600 px-3 py-2">Tracking</a>
+                    <a href="branches.php" class="text-gray-700 hover:text-blue-600 px-3 py-2">Branches</a>
+                    <a href="login.php" class="text-blue-600 font-semibold px-3 py-2">DropEx Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Container -->
+    <div class="flex grow items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-gray-800/70 p-8 rounded-xl shadow-2xl">
+            <div class="text-center">
+                <h2 class="text-2xl font-bold text-white">DropEx Login</h2>
+                <p class="mt-2 text-gray-300">Please login to continue</p>
+            </div>
+
+            <form class="mt-8 space-y-6" method="POST">
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div class="mb-4">
+                        <label for="id" class="text-white block mb-2">Staff ID</label>
+                        <input 
+                            id="id" 
+                            name="id" 
+                            type="text" 
+                            value="<?php echo htmlspecialchars($id)?>"
+                            class="appearance-none rounded-md relative block w-full px-3 py-2 bg-gray-700 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        >
+                        <?php if($errors['id']): ?>
+                            <p class="text-red-400 text-sm mt-1"><?php echo $errors['id']; ?></p>
+                        <?php endif; ?>
+                    </div>
+                    <div class="mb-4">
+                        <label for="pass" class="text-white block mb-2">Password</label>
+                        <input 
+                            id="pass" 
+                            name="pass" 
+                            type="password" 
+                            class="appearance-none rounded-md relative block w-full px-3 py-2 bg-gray-700 text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        >
+                        <?php if($errors['pass']): ?>
+                            <p class="text-red-400 text-sm mt-1"><?php echo $errors['pass']; ?></p>
+                        <?php endif; ?>
                     </div>
                 </div>
-            </div>
-        </nav>
-        
-        <div class="container text-center p-3" style="background-color: rgba(10, 33, 61, 0.61); padding: 20px; border-radius: 8px; max-width: 300px;">
-            <div class="login-header">
-                <h6 style="color:rgb(255, 255, 255);">DropEx Login</h6>
-                <p style="color:rgb(194, 194, 194);">Please login to continue</p>
-            </div>
-            
-            <!-- Staff Login Form -->
-            <form class="form" method="POST">
-                <h6 style="color:#fff; margin-bottom:20px;">Staff Login</h6>
-                <div class="form-group text-left">
-                    <label style="font-size: 16px; color: #fff;">Staff ID : </label><br>
-                    <input type="text" class="form-control" style="border-radius: 8px; padding-left: 10px;" name="id" value="<?php echo htmlspecialchars($id)?>">
-                    <label class="text-danger"><?php echo $errors['id'];?></label>
-                </div>
-                <div class="form-group text-left">
-                    <label style="font-size: 16px; color: #fff;">Password : </label><br>
-                    <input type="password" class="form-control" style="border-radius: 8px; padding-left: 10px;" name="pass">
-                    <label class="text-danger"><?php echo $errors['pass'];?></label>
-                </div>
+
                 <?php if($errors['login']): ?>
-                    <div class="alert alert-danger" role="alert">
+                    <div class="bg-red-500 text-white p-3 rounded">
                         <?php echo $errors['login']; ?>
                     </div>
                 <?php endif; ?>
-                <input type="submit" name="submit" class="btn btn-primary text-center" value="Staff Sign In" style="font-size: 16px; width: 100%; border-radius: 8px; margin-bottom:20px;">
+
+                <div>
+                    <button 
+                        type="submit" 
+                        name="submit"
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        Staff Sign In
+                    </button>
+                </div>
             </form>
 
-            <!-- Admin Login Button -->
-            <a href="admin_login.php" class="btn btn-danger text-center" style="font-size: 16px; width: 100%; border-radius: 8px; margin-bottom:10px;">
-                Admin Login
-            </a>
-
-            <!-- User Login Button -->
-            <a href="user_login.php" class="btn btn-success text-center" style="font-size: 16px; width: 100%; border-radius: 8px;">
-                User Login
-            </a>
+            <div class="space-y-3">
+                <a 
+                    href="admin_login.php" 
+                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600"
+                >
+                    Admin Login
+                </a>
+                <a 
+                    href="user_login.php" 
+                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600"
+                >
+                    User Login
+                </a>
+            </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
 <?php 
 mysqli_close($conn);

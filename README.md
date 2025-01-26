@@ -43,7 +43,7 @@ Contact
 
 <h2>Live Demo</h2>
 
-Experience the application live: <a href="https://tinyurl.com/dropex1234>DropEx Live Demo</a>
+Experience the application live: <a href="https://tinyurl.com/dropex1234">DropEx Live Demo</a>
 
 Technologies Used
 

@@ -52,6 +52,7 @@ if(isset($_POST['submit_request'])) {
     $r_state = mysqli_real_escape_string($conn, $_POST['receiver_state']);
     $r_contact = mysqli_real_escape_string($conn, $_POST['receiver_contact']);
     $weight = mysqli_real_escape_string($conn, $_POST['weight']);
+    $image = mysqli_real_escape_string($conn, $_POST['image']);
     $o_id = $_SESSION['user_id'];
 
     $sql_check = "SELECT Cost FROM pricing WHERE 
@@ -67,12 +68,12 @@ if(isset($_POST['submit_request'])) {
         $price = $row['Cost'] * $weight;
 
         $sql = "INSERT INTO online_request (user_id, S_Name, S_Add, S_City, S_State, S_Contact, 
-                R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price,image) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "issssissssids", 
+        mysqli_stmt_bind_param($stmt, "issssissssidss", 
             $o_id, $s_name, $s_add, $s_city, $s_state, $s_contact,
-            $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price);
+            $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price, $image);
 
         if(mysqli_stmt_execute($stmt)) {
             $_SESSION['success_popup'] = [
@@ -112,11 +113,14 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <title>DropEx ID</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-image: url('Images/DropExBack.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -144,68 +148,94 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: rgba(255, 255, 255, 0.9) !important; position: fixed; width: 100%; top: 0; z-index: 1000;">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">
-                <img src="Images/logo.png" alt="DropEx Logo" style="height: 40px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"></li>
-                        <a class="nav-link text-dark" href="#feedback">Feedback</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="#requests">Shipping Requests</a>
-                    </li>
-                    <li class="nav-item"></li>
-                        <a class="nav-link text-dark" href="tracking.php">Tracking</a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link text-dark">
-                            Welcome, <?php echo htmlspecialchars($user_name); ?>
-                        </span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-logout" href="user_logout.php">Logout</a>
-                    </li>
-                </ul>
+        <!-- Navbar -->
+        <nav class="bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg fixed top-0 left-0 right-0 w-full z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <!-- Logo Section -->
+                    <div class="flex items-center space-x-3">
+                        <a href="index.php" class="flex items-center group">
+                            <img src="Images/logo.png" class="h-8 w-8 md:h-10 md:w-10 rounded-full transition-all duration-300 group-hover:scale-110" alt="DropEx Logo">
+                            <span class="ml-2 md:ml-3 text-xl md:text-2xl font-bold text-white tracking-wider">DropEx</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-4 lg:space-x-6">
+                        <a href="index.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Home</a>
+                        <a href="branches.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Branches</a>
+                            <a href="#feedback" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Feedback</a>
+                            <a href="#requests" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Shipping Requests</a>
+                            <a href="notifications.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Notifications</a>
+                            <a href="tracking.php" class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Tracking</a>
+                            <a href="logout.php" class="text-red-200 hover:text-red-400 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium">Logout</a>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" type="button" class="text-white focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden fixed inset-x-0 top-16 bg-blue-600 transform -translate-x-full transition-transform duration-300 ease-in-out">
+                <div class="px-4 pt-4 pb-6 space-y-2">
+                    <a href="index.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Home</a>
+                    <a href="tracking.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Tracking</a>
+                    <a href="branches.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Branches</a>
+                    
+                    <?php if(isset($_SESSION['id']) || isset($_SESSION['user_id'])): ?>
+                        <?php if(isset($_SESSION['id'])): ?>
+                            <a href="staff.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                        <?php else: ?>
+                            <a href="user_dashboard.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                        <?php endif; ?>
+                        <span class="nav-link text-dark">
+                                    Welcome, <?php echo htmlspecialchars($user_name); ?>
+                                </span>
+                        <a href="user_logout.php" class="block text-red-200 hover:bg-red-400 px-3 py-2 rounded-md text-base font-medium">Welcome, <?php echo htmlspecialchars($user_name); ?>Logout</a>
+                    <?php else: ?>
+                        <a href="login.php" class="block bg-white text-blue-600 hover:bg-gray-200 px-4 py-2 rounded-md text-base font-medium shadow-md">Login</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </nav>
 
     <div style="margin-top: 80px;"></div>
 
-    <div class="container mt-4">
-        <!-- Feedback Section -->
-        <section id="feedback" class="mb-5">
-            <h3><strong style="color:rgb(239, 230, 230);">Submit Feedback</strong></h3>
-            <h2 style="color: rgb(239, 230, 230);">If You Have Any Issues Mention Tracking Number</h2>
-            <div class="feedback-form">
-                <?php if(isset($feedback_success)): ?>
-                    <div class="alert alert-success"><?php echo $feedback_success; ?></div>
-                <?php endif; ?>
-                
-                <form method="POST" action="">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($user_name); ?>" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Message</label>
-                        <textarea class="form-control" name="msg" rows="4" required></textarea>
-                    </div>
-                    <button type="submit" name="submit_feedback" class="btn btn-primary">Submit Feedback</button>
-                </form>
-            </div>
-        </section>
+    <div class="mt-20">  <!-- Added margin top -->
+        <div class="container mt-4">
+            <!-- Feedback Section -->
+            <section id="feedback" class="mb-5">
+                <h3><strong style="color:rgb(239, 230, 230);">Submit Feedback</strong></h3>
+                <h2 style="color: rgb(239, 230, 230);">If You Have Any Issues Mention Tracking Number</h2>
+                <div class="feedback-form">
+                    <?php if(isset($feedback_success)): ?>
+                        <div class="alert alert-success"><?php echo $feedback_success; ?></div>
+                    <?php endif; ?>
+                    
+                    <form method="POST" action="">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" value="<?php echo htmlspecialchars($user_name); ?>" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="msg" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" name="submit_feedback" class="btn btn-primary">Submit Feedback</button>
+                    </form>
+                </div>
+            </section>
 
         <!-- Shipping Request Section -->
         <section id="requests" class="mb-5">
@@ -226,16 +256,16 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <input type="text" class="form-control" name="sender_name" value="<?php echo htmlspecialchars($user_name); ?>" readonly>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" class="form-control" name="sender_address" required>
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="sender_state" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">City</label>
                         <input type="text" class="form-control" name="sender_city" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">State</label>
-                        <input type="text" class="form-control" name="sender_state" required>
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="sender_address" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Contact Number</label>
@@ -249,16 +279,16 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <input type="text" class="form-control" name="receiver_name" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Address</label>
-                        <input type="text" class="form-control" name="receiver_address" required>
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" name="receiver_state" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">City</label>
                         <input type="text" class="form-control" name="receiver_city" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">State</label>
-                        <input type="text" class="form-control" name="receiver_state" required>
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" name="receiver_address" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Contact Number</label>
@@ -270,6 +300,10 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <div class="mb-3">
                         <label class="form-label">Package Weight (kg)</label>
                         <input type="number" step="0.01" class="form-control" name="weight" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Package Image</label>
+                        <input type="file" class="form-control" name="image" required>
                     </div>
                     <button type="submit" name="submit_request" class="btn btn-primary">Submit Request</button>
                 </form>
@@ -287,12 +321,13 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <th>Price</th>
                             <th>Status</th>
                             <th>Created At</th>
+                            <th>Message</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($shipping_requests as $request): ?>
                         <tr>
-                            <td><?php echo $request['user_id']; ?></td>
+                            <td><?php echo $request['serial']; ?></td>
                             <td><?php echo htmlspecialchars($request['S_Name']); ?></td>
                             <td><?php echo htmlspecialchars($request['R_Name']); ?></td>
                             <td><?php echo $request['Weight_Kg']; ?> kg</td>
@@ -301,6 +336,13 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <?php echo ucfirst($request['status']); ?>
                             </td>
                             <td><?php echo $request['Dispatched_Time']; ?></td>
+                            <td>
+    <?php if($request['status'] === 'approved' && $request['Delivered'] === null): ?>
+        <a href="message.php?request_id=<?php echo $request['serial']; ?>" class="btn btn-primary">
+            Message
+        </a>
+    <?php endif; ?>
+</td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -310,5 +352,15 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('-translate-x-full');
+            });
+        });
+        </script>
 </body>
 </html>

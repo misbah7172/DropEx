@@ -7,7 +7,7 @@
 
 DropEx is a comprehensive global shipping and logistics platform designed to provide reliable, fast, and seamless shipping solutions to meet the demands of an interconnected world.
 
-Table of Contents
+<h2>Table of Contents</h2>
 
 Features
 
@@ -30,7 +30,7 @@ License
 Contact
 
 
-Features
+<h2>Features</h2>
 
 🌍 Global Reach: Connects major hubs and remote locations worldwide.
 
@@ -41,9 +41,9 @@ Features
 🌱 Eco-Friendly: Committed to sustainable logistics.
 
 
-Live Demo
+<h2>Live Demo</h2>
 
-Experience the application live: DropEx Live Demo
+Experience the application live: <a href="https://tinyurl.com/dropex1234>DropEx Live Demo</a>
 
 Technologies Used
 
@@ -76,7 +76,7 @@ Railway
 
 
 
-Installation
+<h2>Installation</h2>
 
 To set up the project locally:
 
@@ -103,7 +103,7 @@ DATABASE_URL=your_mysql_connection_string
 
 
 
-Usage
+<h2>Usage</h2>
 
 To run the application locally:
 
@@ -111,15 +111,15 @@ npm start
 
 The application will be accessible at http://localhost:your_desired_port.
 
-Database Setup
+<h2>Database Setup</h2>
 
 The application uses a MySQL database hosted on Railway. Ensure that your DATABASE_URL in the .env file is correctly configured to connect to your Railway-hosted MySQL instance. For guidance on deploying MySQL on Railway, refer to the Railway MySQL Deployment Guide.
 
-Deployment
+<h2>Deployment</h2>
 
 The application is deployed on Railway, which manages both the frontend and backend services, as well as the MySQL database. For more information on deploying applications with Railway, consult the Railway Documentation.
 
-Contributing
+<h2>Contributing</h2>
 
 Contributions are welcome! To contribute:
 
@@ -150,6 +150,6 @@ git push origin feature/YourFeatureName
 
 Please ensure your code adheres to the project's coding standards and includes appropriate tests.
 
-License
+<h2>License</h2>
 
 This project is licensed under the MIT License. See the LICENSE file for details.

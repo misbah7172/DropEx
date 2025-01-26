@@ -59,14 +59,15 @@ if(isset($_POST['update_request'])) {
             try {
                 $tracking_id = rand(100000, 999999);
                 
-                // Insert into parcel table
-                $sql = "INSERT INTO parcel (TrackingID, StaffID, S_Name, S_Add, S_City, S_State, S_Contact, 
-                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                // Insert into parcel table with request_id as serial
+                $sql = "INSERT INTO parcel (TrackingID, request_id, StaffID, S_Name, S_Add, S_City, S_State, S_Contact, 
+                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time, image) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "isssssissssidds", 
+                mysqli_stmt_bind_param($stmt, "iisssssissssiddss", 
                     $tracking_id,
+                    $serial,
                     $staff_id,
                     $request_data['S_Name'],
                     $request_data['S_Add'],
@@ -80,7 +81,8 @@ if(isset($_POST['update_request'])) {
                     $request_data['R_Contact'],
                     $request_data['Weight_Kg'],
                     $request_data['Price'],
-                    $request_data['Dispatched_Time']
+                    $request_data['Dispatched_Time'],
+                    $request_data['image']
                 );
                 mysqli_stmt_execute($stmt);
                 
@@ -197,7 +199,8 @@ $pending_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <th style="color: red;">Weight</th>
                     <th style="color: green;">Price</th>
                     <th style="color: red;">Created At</th>
-                    <th style="color: green;">Action</th>
+                    <th style="color: green;">Image</th>
+                    <th style="color: red;">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -220,6 +223,7 @@ $pending_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <td><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</td>
                     <td>₹<?php echo htmlspecialchars($request['Price']); ?></td>
                     <td><?php echo htmlspecialchars($request['Dispatched_Time']); ?></td>
+                    <td><?php echo htmlspecialchars($request['image']); ?></td>
                     <td>
                         <form method="POST" action="" class="d-inline">
                             <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">

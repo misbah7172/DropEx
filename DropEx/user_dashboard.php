@@ -68,9 +68,9 @@ if(isset($_POST['submit_request'])) {
 
         $sql = "INSERT INTO online_request (user_id, S_Name, S_Add, S_City, S_State, S_Contact, 
                 R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "issssissssidss", 
+        mysqli_stmt_bind_param($stmt, "issssissssids", 
             $o_id, $s_name, $s_add, $s_city, $s_state, $s_contact,
             $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price);
 

@@ -1,10 +1,13 @@
 <?php
+// Start output buffering
+ob_start();
 session_start();
 include("db_connect.php");
 
 // Check if staff is logged in
 if(!isset($_SESSION['id'])) {
     header('Location: login.php');
+    ob_end_flush();
     exit();
 }
 
@@ -20,6 +23,7 @@ $staff = mysqli_fetch_assoc($result);
 if (!$staff) {
     $_SESSION['error_message'] = 'Staff details not found';
     header('Location: login.php');
+    ob_end_flush();
     exit();
 }
 
@@ -61,11 +65,11 @@ if(isset($_POST['update_request'])) {
                 
                 // Insert into parcel table with request_id as serial
                 $sql = "INSERT INTO parcel (TrackingID, request_id, StaffID, S_Name, S_Add, S_City, S_State, S_Contact, 
-                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time, image) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "iisssssissssiddss", 
+                mysqli_stmt_bind_param($stmt, "iisssssssssssids", 
                     $tracking_id,
                     $serial,
                     $staff_id,
@@ -81,8 +85,7 @@ if(isset($_POST['update_request'])) {
                     $request_data['R_Contact'],
                     $request_data['Weight_Kg'],
                     $request_data['Price'],
-                    $request_data['Dispatched_Time'],
-                    $request_data['image']
+                    $request_data['Dispatched_Time']
                 );
                 mysqli_stmt_execute($stmt);
                 
@@ -98,12 +101,14 @@ if(isset($_POST['update_request'])) {
                 
                 $_SESSION['tid'] = $tid;
                 header("Location: receipt.php");
+                ob_end_flush();
                 exit();
                 
             } catch (Exception $e) {
                 mysqli_rollback($conn);
                 $_SESSION['error_message'] = 'Error processing request: ' . mysqli_error($conn);
                 header("Location: " . $_SERVER['PHP_SELF']);
+                ob_end_flush();
                 exit();
             }
         } else if($status === 'rejected') {
@@ -116,11 +121,13 @@ if(isset($_POST['update_request'])) {
                 $_SESSION['error_message'] = 'Error rejecting request: ' . mysqli_error($conn);
             }
             header("Location: " . $_SERVER['PHP_SELF']);
+            ob_end_flush();
             exit();
         }
     } else {
         $_SESSION['error_message'] = 'This request has already been processed or does not belong to your branch!';
         header("Location: " . $_SERVER['PHP_SELF']);
+        ob_end_flush();
         exit();
     }
 }

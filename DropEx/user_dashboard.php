@@ -52,7 +52,6 @@ if(isset($_POST['submit_request'])) {
     $r_state = mysqli_real_escape_string($conn, $_POST['receiver_state']);
     $r_contact = mysqli_real_escape_string($conn, $_POST['receiver_contact']);
     $weight = mysqli_real_escape_string($conn, $_POST['weight']);
-    $image = mysqli_real_escape_string($conn, $_POST['image']);
     $o_id = $_SESSION['user_id'];
 
     $sql_check = "SELECT Cost FROM pricing WHERE 
@@ -68,12 +67,12 @@ if(isset($_POST['submit_request'])) {
         $price = $row['Cost'] * $weight;
 
         $sql = "INSERT INTO online_request (user_id, S_Name, S_Add, S_City, S_State, S_Contact, 
-                R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price,image) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "issssissssidss", 
             $o_id, $s_name, $s_add, $s_city, $s_state, $s_contact,
-            $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price, $image);
+            $r_name, $r_add, $r_city, $r_state, $r_contact, $weight, $price);
 
         if(mysqli_stmt_execute($stmt)) {
             $_SESSION['success_popup'] = [
@@ -198,7 +197,7 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <span class="nav-link text-dark">
                                     Welcome, <?php echo htmlspecialchars($user_name); ?>
                                 </span>
-                        <a href="user_logout.php" class="block text-red-200 hover:bg-red-400 px-3 py-2 rounded-md text-base font-medium">Welcome, <?php echo htmlspecialchars($user_name); ?>Logout</a>
+                        <a href="user_logout.php" class="block text-red-200 hover:bg-red-400 px-3 py-2 rounded-md text-base font-medium">Logout</a>
                     <?php else: ?>
                         <a href="login.php" class="block bg-white text-blue-600 hover:bg-gray-200 px-4 py-2 rounded-md text-base font-medium shadow-md">Login</a>
                     <?php endif; ?>
@@ -301,10 +300,7 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <label class="form-label">Package Weight (kg)</label>
                         <input type="number" step="0.01" class="form-control" name="weight" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Package Image</label>
-                        <input type="file" class="form-control" name="image" required>
-                    </div>
+         
                     <button type="submit" name="submit_request" class="btn btn-primary">Submit Request</button>
                 </form>
             </div>

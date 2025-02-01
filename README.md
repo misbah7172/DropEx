@@ -2,7 +2,7 @@
   <img src="DropEx/Images/logo.png" alt="DropEx Logo" width="200" />
 </div>
 
-Experience the application live: <a href="https://github.com/neyamul-hasan14/DropEx-Logistics">DropEx ( Neyamul ) </a>
+Teammate Github Repo: <a href="https://github.com/neyamul-hasan14/DropEx-Logistics">DropEx ( Neyamul ) </a>
 
 <h1>DropEx</h1>
 

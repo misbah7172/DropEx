@@ -1,5 +1,8 @@
 <?php
-// Start with error reporting for debugging
+// Start output buffering
+ob_start();
+
+// Enable error reporting for debugging
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -7,16 +10,7 @@ ini_set('display_errors', 1);
 session_start();
 include("db_connect.php");
 
-// Initialize messages
-$success_message = '';
-$error_message = '';
-$pending_requests = [];
-$staff = null;
-$staff_id = '';
-$staff_name = '';
-$staff_branch = '';
-
-// Process all logic that might require redirects first
+// Check if staff is logged in
 if(!isset($_SESSION['id'])) {
     header('Location: login.php');
     exit();
@@ -32,6 +26,7 @@ $result = mysqli_stmt_get_result($stmt);
 $staff = mysqli_fetch_assoc($result);
 
 if (!$staff) {
+    $_SESSION['error_message'] = 'Staff details not found';
     header('Location: login.php');
     exit();
 }
@@ -39,7 +34,9 @@ if (!$staff) {
 $staff_name = $staff['Name'];
 $staff_branch = $staff['branch'];
 
-// Handle messages from session
+// Display messages from session if they exist
+$success_message = '';
+$error_message = '';
 if(isset($_SESSION['success_message'])) {
     $success_message = $_SESSION['success_message'];
     unset($_SESSION['success_message']);
@@ -54,7 +51,7 @@ if(isset($_POST['update_request'])) {
     $serial = mysqli_real_escape_string($conn, $_POST['serial']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
     
-    // Check if request is still pending and belongs to staff's branch
+    // First check if the request is still pending and belongs to staff's branch
     $check_sql = "SELECT * FROM online_request WHERE serial = ? AND status = 'pending' AND S_State = ?";
     $check_stmt = mysqli_prepare($conn, $check_sql);
     mysqli_stmt_bind_param($check_stmt, "is", $serial, $staff_branch);

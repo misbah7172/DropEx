@@ -45,21 +45,24 @@ This project was showcased at our university's project show event, highlighting 
 ### **1. Home Section**
 *Welcoming interface for both online and offline service information.*
 
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Home%20page/Home.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Home%20page/Home1.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Home%20page/Home2.png?raw=true)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/home_page.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/about.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/feedbacks.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/tracking.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/branches.png)
 
 ---
 
 ### **2. Staff Section**
 *Staff functionalities including order approval, rejection, and updates.*
 
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff2.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff3.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff4.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff5.png?raw=true)
-![Image Alt Text](https://github.com/neyamul-hasan14/DropEx-Logistics/blob/main/Sample%20Screen%20Short%20/Staff/staff6.png?raw=true)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/staff_login.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/staff_dash.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/staff_profile.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/arrived.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/delivered.png)
+![Image Alt Text](https://github.com/misbah7172/DropEx/blob/main/screenshots/update_order.png)
+
 
 ---
 

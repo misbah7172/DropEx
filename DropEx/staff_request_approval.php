@@ -1,8 +1,22 @@
 <?php
+// Start with error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Start session and include required files
 session_start();
 include("db_connect.php");
 
-// Check if staff is logged in
+// Initialize messages
+$success_message = '';
+$error_message = '';
+$pending_requests = [];
+$staff = null;
+$staff_id = '';
+$staff_name = '';
+$staff_branch = '';
+
+// Process all logic that might require redirects first
 if(!isset($_SESSION['id'])) {
     header('Location: login.php');
     exit();
@@ -18,7 +32,6 @@ $result = mysqli_stmt_get_result($stmt);
 $staff = mysqli_fetch_assoc($result);
 
 if (!$staff) {
-    $_SESSION['error_message'] = 'Staff details not found';
     header('Location: login.php');
     exit();
 }
@@ -26,9 +39,7 @@ if (!$staff) {
 $staff_name = $staff['Name'];
 $staff_branch = $staff['branch'];
 
-// Display messages from session if they exist
-$success_message = '';
-$error_message = '';
+// Handle messages from session
 if(isset($_SESSION['success_message'])) {
     $success_message = $_SESSION['success_message'];
     unset($_SESSION['success_message']);
@@ -43,7 +54,7 @@ if(isset($_POST['update_request'])) {
     $serial = mysqli_real_escape_string($conn, $_POST['serial']);
     $status = mysqli_real_escape_string($conn, $_POST['status']);
     
-    // First check if the request is still pending and belongs to staff's branch
+    // Check if request is still pending and belongs to staff's branch
     $check_sql = "SELECT * FROM online_request WHERE serial = ? AND status = 'pending' AND S_State = ?";
     $check_stmt = mysqli_prepare($conn, $check_sql);
     mysqli_stmt_bind_param($check_stmt, "is", $serial, $staff_branch);
@@ -59,13 +70,13 @@ if(isset($_POST['update_request'])) {
             try {
                 $tracking_id = rand(100000, 999999);
                 
-                // Insert into parcel table with request_id as serial
+                // Insert into parcel table
                 $sql = "INSERT INTO parcel (TrackingID, request_id, StaffID, S_Name, S_Add, S_City, S_State, S_Contact, 
-                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time, image) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "iisssssissssiddss", 
+                mysqli_stmt_bind_param($stmt, "iisssssissssidds", 
                     $tracking_id,
                     $serial,
                     $staff_id,
@@ -81,14 +92,14 @@ if(isset($_POST['update_request'])) {
                     $request_data['R_Contact'],
                     $request_data['Weight_Kg'],
                     $request_data['Price'],
-                    $request_data['Dispatched_Time'],
+                    $request_data['Dispatched_Time']
                 );
                 mysqli_stmt_execute($stmt);
                 
                 $tid = mysqli_insert_id($conn);
                 
                 // Update status in online_request table
-                $update_sql = "UPDATE online_request SET status = ? WHERE serial = ? AND status = 'pending' AND S_State = ?";
+                $update_sql = "UPDATE online_request SET status = ? WHERE serial = ? AND S_State = ?";
                 $update_stmt = mysqli_prepare($conn, $update_sql);
                 mysqli_stmt_bind_param($update_stmt, "sis", $status, $serial, $staff_branch);
                 mysqli_stmt_execute($update_stmt);
@@ -106,7 +117,7 @@ if(isset($_POST['update_request'])) {
                 exit();
             }
         } else if($status === 'rejected') {
-            $sql = "UPDATE online_request SET status = ? WHERE serial = ? AND status = 'pending' AND S_State = ?";
+            $sql = "UPDATE online_request SET status = ? WHERE serial = ? AND S_State = ?";
             $stmt = mysqli_prepare($conn, $sql);
             mysqli_stmt_bind_param($stmt, "sis", $status, $serial, $staff_branch);
             if(mysqli_stmt_execute($stmt)) {
@@ -131,7 +142,6 @@ mysqli_stmt_bind_param($stmt, "s", $staff_branch);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $pending_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
 ?>
 
 <!DOCTYPE html>

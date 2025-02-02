@@ -295,7 +295,6 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </div>
 
                     <!-- Package Information -->
-                    <h4>Package Details</h4>
                     <div class="mb-3">
                         <label class="form-label">Package Weight (kg)</label>
                         <input type="number" step="0.01" class="form-control" name="weight" required>
@@ -317,7 +316,6 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <th>Price</th>
                             <th>Status</th>
                             <th>Created At</th>
-                            <th>Message</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -332,13 +330,6 @@ $shipping_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <?php echo ucfirst($request['status']); ?>
                             </td>
                             <td><?php echo $request['Dispatched_Time']; ?></td>
-                            <td>
-    <?php if($request['status'] === 'approved' && $request['Delivered'] === null): ?>
-        <a href="message.php?request_id=<?php echo $request['serial']; ?>" class="btn btn-primary">
-            Message
-        </a>
-    <?php endif; ?>
-</td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

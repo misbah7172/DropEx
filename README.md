@@ -113,7 +113,7 @@ This project was showcased at our university's project show event, highlighting 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/neyaumul-hasan14/DropEx-Logistics.git
+   git clone https://github.com/misbah7172/DropEx.git
    ```
 2. Configure the database by importing the SQL schema provided in the repository.
 3. Start the PHP server:

@@ -128,11 +128,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
             <!-- Login Form -->
             <form method="POST" action="" id="loginForm" class="space-y-4">
                 <div>
-                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">Email</label>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">Email (Try This : misbah@gmail.com )</label>
                     <input type="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="email" name="email" required>
                 </div>
                 <div>
-                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">Password</label>
+                    <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">Password (Pw : 1234 )</label>
                     <input type="password" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" id="password" name="password" required>
                 </div>
                 <button type="submit" name="login" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition duration-200">Login</button>

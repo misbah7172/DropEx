@@ -1,13 +1,10 @@
 <?php
-// Start output buffering
-ob_start();
 session_start();
 include("db_connect.php");
 
 // Check if staff is logged in
 if(!isset($_SESSION['id'])) {
     header('Location: login.php');
-    ob_end_flush();
     exit();
 }
 
@@ -23,7 +20,6 @@ $staff = mysqli_fetch_assoc($result);
 if (!$staff) {
     $_SESSION['error_message'] = 'Staff details not found';
     header('Location: login.php');
-    ob_end_flush();
     exit();
 }
 
@@ -65,11 +61,11 @@ if(isset($_POST['update_request'])) {
                 
                 // Insert into parcel table with request_id as serial
                 $sql = "INSERT INTO parcel (TrackingID, request_id, StaffID, S_Name, S_Add, S_City, S_State, S_Contact, 
-                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        R_Name, R_Add, R_City, R_State, R_Contact, Weight_Kg, Price, Dispatched_Time, image) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "iisssssssssssids", 
+                mysqli_stmt_bind_param($stmt, "iisssssissssiddss", 
                     $tracking_id,
                     $serial,
                     $staff_id,
@@ -85,7 +81,7 @@ if(isset($_POST['update_request'])) {
                     $request_data['R_Contact'],
                     $request_data['Weight_Kg'],
                     $request_data['Price'],
-                    $request_data['Dispatched_Time']
+                    $request_data['Dispatched_Time'],
                 );
                 mysqli_stmt_execute($stmt);
                 
@@ -101,14 +97,12 @@ if(isset($_POST['update_request'])) {
                 
                 $_SESSION['tid'] = $tid;
                 header("Location: receipt.php");
-                ob_end_flush();
                 exit();
                 
             } catch (Exception $e) {
                 mysqli_rollback($conn);
                 $_SESSION['error_message'] = 'Error processing request: ' . mysqli_error($conn);
                 header("Location: " . $_SERVER['PHP_SELF']);
-                ob_end_flush();
                 exit();
             }
         } else if($status === 'rejected') {
@@ -121,13 +115,11 @@ if(isset($_POST['update_request'])) {
                 $_SESSION['error_message'] = 'Error rejecting request: ' . mysqli_error($conn);
             }
             header("Location: " . $_SERVER['PHP_SELF']);
-            ob_end_flush();
             exit();
         }
     } else {
         $_SESSION['error_message'] = 'This request has already been processed or does not belong to your branch!';
         header("Location: " . $_SERVER['PHP_SELF']);
-        ob_end_flush();
         exit();
     }
 }
@@ -148,204 +140,103 @@ $pending_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Request Approval</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style/bootstrap.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style/index_styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        input[type="text"] {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
-<body class="bg-gray-50">
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <a href="staff.php" class="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-orange-500 bg-orange-100 rounded-lg hover:bg-orange-200 transition-colors">
-            <i class="fa fa-arrow-left mr-2"></i> Go Back
-        </a>
-        
-        <h3 class="text-2xl font-bold mb-6">Pending Shipping Requests</h3>
+<body>
+    <div class="container mt-4">
+        <a href="staff.php" class="btn btn-warning" style="color: orange; margin-bottom: 20px;"><i class="fa fa-arrow-left"></i> Go Back</a>
+        <h3>Pending Shipping Requests</h3>
         
         <?php if($success_message): ?>
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline"><?php echo htmlspecialchars($success_message); ?></span>
-                <button type="button" class="absolute top-0 right-0 px-4 py-3" data-dismiss="alert">
-                    <span class="text-2xl">&times;</span>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo htmlspecialchars($success_message); ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         <?php endif; ?>
 
         <?php if($error_message): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <span class="block sm:inline"><?php echo htmlspecialchars($error_message); ?></span>
-                <button type="button" class="absolute top-0 right-0 px-4 py-3" data-dismiss="alert">
-                    <span class="text-2xl">&times;</span>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo htmlspecialchars($error_message); ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         <?php endif; ?>
 
-        <div class="bg-white p-6 rounded-lg shadow-sm mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="font-medium">
-                    <span class="text-gray-600">Staff ID:</span> 
-                    <span class="ml-2"><?php echo htmlspecialchars($staff_id); ?></span>
-                </div>
-                <div class="font-medium">
-                    <span class="text-gray-600">Staff Name:</span>
-                    <span class="ml-2"><?php echo htmlspecialchars($staff_name); ?></span>
-                </div>
-                <div class="font-medium">
-                    <span class="text-gray-600">Branch:</span>
-                    <span class="ml-2"><?php echo htmlspecialchars($staff_branch); ?></span>
-                </div>
-            </div>
+        <div class="mb-3">
+            <strong>Staff ID: </strong><?php echo htmlspecialchars($staff_id); ?><br>
+            <strong>Staff Name: </strong><?php echo htmlspecialchars($staff_name); ?><br>
+            <strong>Branch: </strong><?php echo htmlspecialchars($staff_branch); ?>
         </div>
-
-        <div class="grid grid-cols-1 gap-6">
-            <?php foreach($pending_requests as $request): ?>
-            <div class="bg-white rounded-lg shadow-sm p-6">
-                <!-- Mobile view - Card layout -->
-                <div class="md:hidden">
-                    <div class="space-y-4">
-                        <div class="flex justify-between">
-                            <div>
-                                <p class="text-sm text-gray-600">Serial No.</p>
-                                <p class="font-medium"><?php echo htmlspecialchars($request['serial']); ?></p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-600">Request ID</p>
-                                <p class="font-medium"><?php echo htmlspecialchars($request['user_id']); ?></p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-4">
-                            <div>
-                                <p class="text-sm font-semibold text-gray-600 mb-2">Sender Details</p>
-                                <div class="pl-2 border-l-2 border-gray-200">
-                                    <p class="font-medium"><?php echo htmlspecialchars($request['S_Name']); ?></p>
-                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($request['S_Add']); ?></p>
-                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($request['S_City']); ?>, <?php echo htmlspecialchars($request['S_State']); ?></p>
-                                    <p class="text-sm text-gray-600">Contact: <?php echo htmlspecialchars($request['S_Contact']); ?></p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <p class="text-sm font-semibold text-gray-600 mb-2">Receiver Details</p>
-                                <div class="pl-2 border-l-2 border-gray-200">
-                                    <p class="font-medium"><?php echo htmlspecialchars($request['R_Name']); ?></p>
-                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($request['R_Add']); ?></p>
-                                    <p class="text-sm text-gray-600"><?php echo htmlspecialchars($request['R_City']); ?>, <?php echo htmlspecialchars($request['R_State']); ?></p>
-                                    <p class="text-sm text-gray-600">Contact: <?php echo htmlspecialchars($request['R_Contact']); ?></p>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p class="text-sm text-gray-600">Weight</p>
-                                    <p class="font-medium"><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600">Price</p>
-                                    <p class="font-medium">₹<?php echo htmlspecialchars($request['Price']); ?></p>
-                                </div>
-                            </div>
-
-                            <div>
-                                <p class="text-sm text-gray-600">Created At</p>
-                                <p class="font-medium"><?php echo htmlspecialchars($request['Dispatched_Time']); ?></p>
-                            </div>
-
-                            <div class="flex space-x-3">
-                                <form method="POST" action="" class="flex-1">
-                                    <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
-                                    <input type="hidden" name="status" value="approved">
-                                    <button type="submit" name="update_request" class="w-full px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors">
-                                        Approve
-                                    </button>
-                                </form>
-                                <form method="POST" action="" class="flex-1">
-                                    <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
-                                    <input type="hidden" name="status" value="rejected">
-                                    <button type="submit" name="update_request" class="w-full px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">
-                                        Reject
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Desktop view - Table layout -->
-                <div class="hidden md:block">
-                    <table class="min-w-full">
-                        <tr class="border-b">
-                            <td class="py-2 w-1/6">
-                                <span class="text-gray-600">Serial No:</span>
-                                <span class="font-medium ml-2"><?php echo htmlspecialchars($request['serial']); ?></span>
-                            </td>
-                            <td class="py-2 w-1/6">
-                                <span class="text-gray-600">Request ID:</span>
-                                <span class="font-medium ml-2"><?php echo htmlspecialchars($request['user_id']); ?></span>
-                            </td>
-                            <td class="py-2 w-1/6">
-                                <span class="text-gray-600">Weight:</span>
-                                <span class="font-medium ml-2"><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</span>
-                            </td>
-                            <td class="py-2 w-1/6">
-                                <span class="text-gray-600">Price:</span>
-                                <span class="font-medium ml-2">₹<?php echo htmlspecialchars($request['Price']); ?></span>
-                            </td>
-                            <td class="py-2 w-2/6">
-                                <div class="flex space-x-2">
-                                    <form method="POST" action="">
-                                        <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
-                                        <input type="hidden" name="status" value="approved">
-                                        <button type="submit" name="update_request" class="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700 transition-colors">
-                                            Approve
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="">
-                                        <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
-                                        <input type="hidden" name="status" value="rejected">
-                                        <button type="submit" name="update_request" class="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700 transition-colors">
-                                            Reject
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="py-2">
-                                <div class="text-sm">
-                                    <p class="text-gray-600 mb-1">Sender Details:</p>
-                                    <p class="font-medium"><?php echo htmlspecialchars($request['S_Name']); ?></p>
-                                    <p class="text-gray-600"><?php echo htmlspecialchars($request['S_Add']); ?></p>
-                                    <p class="text-gray-600"><?php echo htmlspecialchars($request['S_City']); ?>, <?php echo htmlspecialchars($request['S_State']); ?></p>
-                                    <p class="text-gray-600">Contact: <?php echo htmlspecialchars($request['S_Contact']); ?></p>
-                                </div>
-                            </td>
-                            <td colspan="2" class="py-2">
-                                <div class="text-sm">
-                                    <p class="text-gray-600 mb-1">Receiver Details:</p>
-                                    <p class="font-medium"><?php echo htmlspecialchars($request['R_Name']); ?></p>
-                                    <p class="text-gray-600"><?php echo htmlspecialchars($request['R_Add']); ?></p>
-                                    <p class="text-gray-600"><?php echo htmlspecialchars($request['R_City']); ?>, <?php echo htmlspecialchars($request['R_State']); ?></p>
-                                    <p class="text-gray-600">Contact: <?php echo htmlspecialchars($request['R_Contact']); ?></p>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="color: red;">Serial No.</th>
+                    <th style="color: green;">Request ID</th>
+                    <th style="color: red;">Sender Details</th>
+                    <th style="color: green;">Receiver Details</th>
+                    <th style="color: red;">Weight</th>
+                    <th style="color: green;">Price</th>
+                    <th style="color: red;">Created At</th>
+                    <th style="color: red;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($pending_requests as $request): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($request['serial']); ?></td>
+                    <td><?php echo htmlspecialchars($request['user_id']); ?></td>
+                    <td>
+                        <?php echo htmlspecialchars($request['S_Name']); ?><br>
+                        <?php echo htmlspecialchars($request['S_Add']); ?><br>
+                        <?php echo htmlspecialchars($request['S_City']); ?>, <?php echo htmlspecialchars($request['S_State']); ?><br>
+                        Contact: <?php echo htmlspecialchars($request['S_Contact']); ?>
+                    </td>
+                    <td>
+                        <?php echo htmlspecialchars($request['R_Name']); ?><br>
+                        <?php echo htmlspecialchars($request['R_Add']); ?><br>
+                        <?php echo htmlspecialchars($request['R_City']); ?>, <?php echo htmlspecialchars($request['R_State']); ?><br>
+                        Contact: <?php echo htmlspecialchars($request['R_Contact']); ?>
+                    </td>
+                    <td><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</td>
+                    <td>₹<?php echo htmlspecialchars($request['Price']); ?></td>
+                    <td><?php echo htmlspecialchars($request['Dispatched_Time']); ?></td>
+                    <td>
+                        <form method="POST" action="" class="d-inline">
+                            <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
+                            <input type="hidden" name="status" value="approved">
+                            <button type="submit" name="update_request" class="btn btn-success btn-sm" style="background-color: green; color: white;">Approve</button>
+                        </form>
+                        <form method="POST" action="" class="d-inline">
+                            <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
+                            <input type="hidden" name="status" value="rejected">
+                            <button type="submit" name="update_request" class="btn btn-danger btn-sm" style="background-color: red; color: white;">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
-
-    <script>
-        // Close alert messages
-        document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('[data-dismiss="alert"]');
-            alerts.forEach(function(alert) {
-                alert.addEventListener('click', function() {
-                    this.parentElement.remove();
-                });
-            });
-        });
-    </script>
 </body>
 </html>

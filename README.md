@@ -12,7 +12,7 @@ Welcome to **DropEx**, an efficient and seamless logistics management system. Dr
 
 ## About Us
 
-DropEx is a university project developed by **Kazi Neyamul Hasan** and **Md. Habibullah Misbah** as part of our academic endeavors. This project focuses on database management, utilizing PHP and MySQL to deliver a robust logistics solution. Together, we are dedicated to creating a logistics platform that simplifies delivery services for customers and enhances operational efficiency for service providers. Our mission is to bridge the gap between users and seamless logistics solutions through innovation and teamwork.
+DropEx is a university project developed by **Md. Habibulla Misba** and **Kazi Neyamul Hasan** as part of our academic endeavors. This project focuses on database management, utilizing PHP and MySQL to deliver a robust logistics solution. Together, we are dedicated to creating a logistics platform that simplifies delivery services for customers and enhances operational efficiency for service providers. Our mission is to bridge the gap between users and seamless logistics solutions through innovation and teamwork.
 
 This project was showcased at our university's project show event, highlighting its practical application in solving real-world logistics challenges and demonstrating our technical and collaborative skills.
 

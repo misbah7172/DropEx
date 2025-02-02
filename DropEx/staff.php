@@ -204,14 +204,27 @@ if(isset($_POST['update']) && isset($_SESSION['up_tid'])){
     }
 }
 
-// Fetch arrived and delivered parcels
 $sql = "SELECT * FROM arrived";
 $result = mysqli_query($conn, $sql);
+if (!$result) {
+    echo "Error with arrived view: " . mysqli_error($conn);
+    die();
+}
 $arr = mysqli_fetch_all($result, MYSQLI_ASSOC);
+echo "<!-- Number of arrived parcels: " . count($arr) . " -->";
 
+// After the delivered view query
 $sql = "SELECT * FROM delivered";
 $result = mysqli_query($conn, $sql);
+if (!$result) {
+    echo "Error with delivered view: " . mysqli_error($conn);
+    die();
+}
 $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
+echo "<!-- Number of delivered parcels: " . count($delivered) . " -->";
+
+// Let's also check the actual data
+echo "<!-- Delivered data: " . print_r($delivered, true) . " -->";
 
 ?>
 <!DOCTYPE html>
@@ -509,32 +522,45 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
             </table>
         </div>
         <div class="tab-pane fade" id="del" role="tabpanel" aria-labelledby="del-tab">
-            <table class="table table-hover table-bordered table-striped" id="deliveredTable" style="background-color: rgba(255, 255, 255, 0.8);">
-                <thead class="thead-dark">
-                    <tr class="table-info">
-                        <td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td>
-                        <td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td>
-                        <td>Out for delivery</td><td>Delivered</td>
-                    </tr>                    
-                </thead>
-                <tbody>
-                    <?php foreach($delivered as $order): ?>
-                    <tr>
-                        <td><?php echo $order['TrackingID'];?></td>
-                        <td><?php echo $order['StaffID'];?></td>
-                        <td><?php echo $order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact'];?></td>
-                        <td><?php echo $order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact'];?></td>
-                        <td><?php echo $order['Weight_Kg'];?></td>
-                        <td><?php echo $order['Price'];?></td>
-                        <td><?php echo $order['Dispatched_Time'];?></td>
-                        <td><?php echo $order['Shipped'];?></td>
-                        <td><?php echo $order['Out_for_delivery'];?></td>
-                        <td><?php echo $order['Delivered'];?></td>
-                    </tr>
-                    <?php endforeach;?>
-                </tbody>
-            </table>
-        </div>
+    <?php 
+    // Debug information
+    echo "<!-- Number of delivered parcels: " . count($delivered) . " -->";
+    if (empty($delivered)) {
+        echo '<div class="alert alert-info">No delivered parcels found</div>';
+    } 
+    ?>
+    <table class="table table-hover table-bordered table-striped" id="deliveredTable" style="background-color: rgba(255, 255, 255, 0.8);">
+        <thead class="thead-dark">
+            <tr class="table-info">
+                <td>TrackingID</td><td>StaffID</td><td>Sender</td><td>Receiver</td>
+                <td>Weight</td><td>Price</td><td>Dispatched</td><td>Shipped</td>
+                <td>Out for delivery</td><td>Delivered</td>
+            </tr>                    
+        </thead>
+        <tbody>
+            <?php 
+            if (!empty($delivered)) {
+                foreach($delivered as $order): 
+            ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($order['TrackingID']); ?></td>
+                    <td><?php echo htmlspecialchars($order['StaffID']); ?></td>
+                    <td><?php echo htmlspecialchars($order['S_Name'].', '.$order['S_Add'].', '.$order['S_City'].', '.$order['S_State'].' - '.$order['S_Contact']); ?></td>
+                    <td><?php echo htmlspecialchars($order['R_Name'].', '.$order['R_Add'].', '.$order['R_City'].', '.$order['R_State'].' - '.$order['R_Contact']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Weight_Kg']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Price']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Dispatched_Time']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Shipped']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Out_for_delivery']); ?></td>
+                    <td><?php echo htmlspecialchars($order['Delivered']); ?></td>
+                </tr>
+            <?php 
+                endforeach;
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
     </div>
 </div>
 

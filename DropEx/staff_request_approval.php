@@ -195,55 +195,67 @@ $pending_requests = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <strong>Staff Name: </strong><?php echo htmlspecialchars($staff_name); ?><br>
             <strong>Branch: </strong><?php echo htmlspecialchars($staff_branch); ?>
         </div>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th style="color: red;">Serial No.</th>
-                    <th style="color: green;">Request ID</th>
-                    <th style="color: red;">Sender Details</th>
-                    <th style="color: green;">Receiver Details</th>
-                    <th style="color: red;">Weight</th>
-                    <th style="color: green;">Price</th>
-                    <th style="color: red;">Created At</th>
-                    <th style="color: red;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($pending_requests as $request): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($request['serial']); ?></td>
-                    <td><?php echo htmlspecialchars($request['user_id']); ?></td>
-                    <td>
-                        <?php echo htmlspecialchars($request['S_Name']); ?><br>
+       <div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Serial No.</th>
+                <th scope="col">Request ID</th>
+                <th scope="col">Sender Details</th>
+                <th scope="col">Receiver Details</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Price</th>
+                <th scope="col">Created At</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($pending_requests as $request): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($request['serial']); ?></td>
+                <td><?php echo htmlspecialchars($request['user_id']); ?></td>
+                <td>
+                    <div class="sender-info">
+                        <strong><?php echo htmlspecialchars($request['S_Name']); ?></strong><br>
                         <?php echo htmlspecialchars($request['S_Add']); ?><br>
                         <?php echo htmlspecialchars($request['S_City']); ?>, <?php echo htmlspecialchars($request['S_State']); ?><br>
-                        Contact: <?php echo htmlspecialchars($request['S_Contact']); ?>
-                    </td>
-                    <td>
-                        <?php echo htmlspecialchars($request['R_Name']); ?><br>
+                        <small class="text-muted">Contact: <?php echo htmlspecialchars($request['S_Contact']); ?></small>
+                    </div>
+                </td>
+                <td>
+                    <div class="receiver-info">
+                        <strong><?php echo htmlspecialchars($request['R_Name']); ?></strong><br>
                         <?php echo htmlspecialchars($request['R_Add']); ?><br>
                         <?php echo htmlspecialchars($request['R_City']); ?>, <?php echo htmlspecialchars($request['R_State']); ?><br>
-                        Contact: <?php echo htmlspecialchars($request['R_Contact']); ?>
-                    </td>
-                    <td><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</td>
-                    <td>₹<?php echo htmlspecialchars($request['Price']); ?></td>
-                    <td><?php echo htmlspecialchars($request['Dispatched_Time']); ?></td>
-                    <td>
+                        <small class="text-muted">Contact: <?php echo htmlspecialchars($request['R_Contact']); ?></small>
+                    </div>
+                </td>
+                <td><?php echo htmlspecialchars($request['Weight_Kg']); ?> kg</td>
+                <td>₹<?php echo htmlspecialchars($request['Price']); ?></td>
+                <td><?php echo htmlspecialchars($request['Dispatched_Time']); ?></td>
+                <td>
+                    <div class="d-flex gap-2">
                         <form method="POST" action="" class="d-inline">
                             <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
                             <input type="hidden" name="status" value="approved">
-                            <button type="submit" name="update_request" class="btn btn-success btn-sm" style="background-color: green; color: white;">Approve</button>
+                            <button type="submit" name="update_request" class="btn btn-success btn-sm">
+                                Approve
+                            </button>
                         </form>
                         <form method="POST" action="" class="d-inline">
                             <input type="hidden" name="serial" value="<?php echo $request['serial']; ?>">
                             <input type="hidden" name="status" value="rejected">
-                            <button type="submit" name="update_request" class="btn btn-danger btn-sm" style="background-color: red; color: white;">Reject</button>
+                            <button type="submit" name="update_request" class="btn btn-danger btn-sm">
+                                Reject
+                            </button>
                         </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
     </div>
 </body>
 </html>

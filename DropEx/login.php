@@ -105,7 +105,7 @@
             <form class="mt-8 space-y-6" method="POST">
                 <div class="rounded-md shadow-sm -space-y-px">
                     <div class="mb-4">
-                        <label for="id" class="text-white block mb-2">Staff ID</label>
+                        <label for="id" class="text-white block mb-2">Staff ID ( Try This: DE8888 )</label>
                         <input 
                             id="id" 
                             name="id" 
@@ -118,7 +118,7 @@
                         <?php endif; ?>
                     </div>
                     <div class="mb-4">
-                        <label for="pass" class="text-white block mb-2">Password</label>
+                        <label for="pass" class="text-white block mb-2">Password ( Try this : 1234 )</label>
                         <input 
                             id="pass" 
                             name="pass" 

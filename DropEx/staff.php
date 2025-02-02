@@ -312,7 +312,7 @@ $delivered = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <a href="index.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Home</a>
                     <a href="tracking.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Tracking</a>
                     <a href="branches.php" class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium">Branches</a>
-                    <a class="text-white hover:text-blue-200 transition-colors duration-300 px-2 py-1 rounded-md text-sm font-medium" href="staff_request_approval.php" style="color: black; position: relative;">
+                    <a class="block text-white hover:bg-blue-700 px-3 py-2 rounded-md text-base font-medium" href="staff_request_approval.php" style="color: black; position: relative;">
                             Pending Request
                             <?php if($pendingCount > 0): ?>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"

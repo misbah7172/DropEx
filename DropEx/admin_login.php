@@ -92,11 +92,11 @@ background: #0056b3;
     </nav>
  <form method="POST" action="">
  <div class="mb-3">
- <label for="admin_id" class="form-label"style="color: white;">Admin ID</label>
+ <label for="admin_id" class="form-label"style="color: white;">Admin ID ( Try this : 999 )</label>
  <input type="text" class="form-control" id="admin_id" name="admin_id" required>
  </div>
  <div class="mb-3">
- <label for="password" class="form-label"style="color: white;">Password</label>
+ <label for="password" class="form-label"style="color: white;">Password (Pw : 1234 )</label>
  <input type="password" class="form-control" id="password" name="password" required>
  </div>
  <div class="mb-3">

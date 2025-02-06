@@ -122,6 +122,7 @@ This project was showcased at our university's project show event, highlighting 
    ```
 2. Configure the database by importing the SQL schema provided in the repository.
 3. Start the PHP server:
+   - Remeber to modify the config.php file with your localhost and database name.
    - Ensure your server environment supports PHP and MySQL.
    - Place the project files in the server directory (e.g., htdocs for XAMPP).
    - Start your local server and access the project through `http://localhost/DropEx-Logistics/`.

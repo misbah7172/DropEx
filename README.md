@@ -129,6 +129,15 @@ This project was showcased at our university's project show event, highlighting 
 
 ---
 
+#Technology Stack
+
+1. Frontend : HTML, CSS(Tailwind), JS
+2. Backend : PHP
+3. Database : Mysql
+4. Database Hosting : railway.com
+
+---
+
 ## Feedback
 We value your feedback! Share your thoughts about DropEx to help us improve.
 

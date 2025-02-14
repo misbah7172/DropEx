@@ -129,7 +129,7 @@ This project was showcased at our university's project show event, highlighting 
 
 ---
 
-#Technology Stack
+##Technology Stack
 
 1. Frontend : HTML, CSS(Tailwind), JS
 2. Backend : PHP
